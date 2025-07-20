@@ -14,7 +14,19 @@ import turbo from 'eslint-plugin-turbo'
 
 export default tseslint.config(
    {
-      ignores: ['dist', 'eslint.config.js', '**/*.d.ts'],
+      ignores: [
+         '.next',
+         '.idea',
+         '.vscode',
+         'tests/*',
+         'scripts/*',
+         'public/*',
+         'dist',
+         'eslint.config.js',
+         '**/*.d.ts',
+         'node_modules',
+         'components.json',
+      ],
    },
    js.configs.recommended,
    ...tseslint.configs.recommended,
