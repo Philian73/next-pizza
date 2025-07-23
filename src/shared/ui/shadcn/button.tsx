@@ -30,13 +30,14 @@ const buttonVariants = cva(
                dark:bg-destructive/60 dark:focus-visible:ring-destructive/40
             `,
             outline: `
-               border bg-background shadow-xs
+               border bg-background text-primary shadow-xs
                hover:bg-accent hover:text-accent-foreground
-               dark:border-input dark:bg-input/30 dark:hover:bg-input/50
+               dark:border-input dark:bg-input/30 dark:text-inherit dark:hover:bg-input/50
             `,
             secondary: `
                bg-secondary text-secondary-foreground shadow-xs
-               hover:bg-secondary/80
+               hover:bg-primary/20
+               dark:hover:bg-secondary/80
             `,
             ghost: `
                hover:bg-accent hover:text-accent-foreground
@@ -44,23 +45,24 @@ const buttonVariants = cva(
             `,
             link: `
                text-primary underline-offset-4
-               hover:underline
+               hover:text-secondary-foreground
+               dark:text-green-600 dark:hover:text-green-700
             `,
          },
          size: {
             default: `
-               h-9 px-4 py-2
+               h-10 px-4 py-2
                has-[>svg]:px-3
             `,
             sm: `
-               h-8 gap-1.5 rounded-md px-3
+               h-9 gap-1.5 rounded-md px-3
                has-[>svg]:px-2.5
             `,
             lg: `
-               h-10 rounded-md px-6
+               h-11 rounded-md px-6
                has-[>svg]:px-4
             `,
-            icon: 'size-9',
+            icon: 'size-10',
          },
       },
       defaultVariants: {
