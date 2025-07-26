@@ -11,5 +11,5 @@ type ContainerProps = ComponentProps<'div'> & {
 export const Container = ({ asChild, className, ...rest }: ContainerProps) => {
    const Component = asChild ? Slot : 'div'
 
-   return <Component className={cn(`container mx-auto max-w-320 px-4`, className)} {...rest} />
+   return <Component className={cn(`mx-auto box-content max-w-320 px-4`, className)} {...rest} />
 }
