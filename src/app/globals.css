@@ -59,7 +59,7 @@
    --accent-foreground: oklch(0.6054 0.172 45.37);
    --destructive: oklch(0.577 0.245 27.325);
    --border: oklch(0.92 0.004 286.32);
-   --input: oklch(0.705 0.213 47.604);
+   --input: oklch(0.92 0.004 286.32);
    --ring: oklch(0.705 0.213 47.604);
    --chart-1: oklch(0.646 0.222 41.116);
    --chart-2: oklch(0.6 0.118 184.704);
@@ -108,6 +108,13 @@
    --sidebar-accent-foreground: oklch(0.985 0 0);
    --sidebar-border: oklch(1 0 0 / 10%);
    --sidebar-ring: oklch(0.646 0.222 41.116);
+}
+
+input[type='search']::-webkit-search-decoration,
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-results-button,
+input[type='search']::-webkit-search-results-decoration {
+   appearance: none;
 }
 
 @layer base {
