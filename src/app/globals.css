@@ -121,6 +121,9 @@ input[type='search']::-webkit-search-results-decoration {
    * {
       @apply border-border outline-ring/50;
    }
+   html {
+      @apply scroll-smooth motion-reduce:scroll-auto;
+   }
    body {
       @apply bg-background text-foreground min-w-80 min-h-screen [font-family:var(--font-nunito)];
    }
