@@ -23,6 +23,7 @@ export default [
                indent: 3,
             },
          ],
+         'no-undef': 'off',
       },
       settings: {
          'better-tailwindcss': {
