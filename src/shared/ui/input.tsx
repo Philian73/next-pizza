@@ -101,7 +101,7 @@ const Input = ({
       <div
          aria-disabled={disabled}
          aria-invalid={showError}
-         className={cn('flex flex-col gap-1', classNames?.root)}
+         className={cn('flex w-full flex-col gap-1', classNames?.root)}
       >
          {!!label && (
             <Label className={classNames?.label} htmlFor={inputId}>
