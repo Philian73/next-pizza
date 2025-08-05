@@ -1,14 +1,14 @@
 import type { ComponentProps } from 'react'
 
-import { ArrowRightIcon, ShoppingCartIcon, UserIcon } from 'lucide-react'
+import { UserIcon } from 'lucide-react'
 
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { PATHS } from '@/shared/config/routes'
 import { cn } from '@/shared/lib/utils'
 import { Container } from '@/shared/ui/container'
 import { Button } from '@/shared/ui/shadcn/button'
-import { Separator } from '@/shared/ui/shadcn/separator'
 import { Typography } from '@/shared/ui/typography'
 
 import logo from '~/public/logo.png'
@@ -22,7 +22,7 @@ export const Header = ({ className, ...rest }: HeaderProps) => {
             <div className={'group flex items-center gap-3'}>
                <Image src={logo} alt={'Логотип'} width={35} height={35} />
 
-               <Link href={'/'}>
+               <Link href={PATHS.home}>
                   <h1
                      className={`
                         text-2xl font-black uppercase transition
@@ -36,40 +36,10 @@ export const Header = ({ className, ...rest }: HeaderProps) => {
                </Link>
             </div>
 
-            <div
-               className={`
-                  hidden
-                  md:flex md:items-center md:gap-3
-               `}
-            >
+            <div className={`flex items-center gap-1.5`}>
                <Button variant={'outline'}>
                   <UserIcon size={16} />
                   Войти
-               </Button>
-
-               <Button className={'group relative gap-4'}>
-                  <span className={'font-bold'}>520 ₽</span>
-
-                  <Separator className={'opacity-50'} orientation={'vertical'} />
-
-                  <div
-                     className={`
-                        flex items-center gap-1 font-bold transition-all duration-300
-                        group-hover:opacity-0
-                     `}
-                  >
-                     <ShoppingCartIcon className={'relative'} strokeWidth={2} size={16} />
-
-                     <span className={'font-bold'}>3</span>
-                  </div>
-
-                  <ArrowRightIcon
-                     size={20}
-                     className={`
-                        absolute right-5 -translate-x-2 opacity-0 transition duration-300
-                        group-hover:translate-x-0 group-hover:opacity-100
-                     `}
-                  />
                </Button>
             </div>
          </Container>
