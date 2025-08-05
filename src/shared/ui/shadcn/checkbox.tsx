@@ -1,5 +1,8 @@
 'use client'
 
+import type { LucideProps } from 'lucide-react'
+import type { ExoticComponent } from 'react'
+
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 import { CheckIcon } from 'lucide-react'
 import * as React from 'react'
@@ -9,9 +12,19 @@ import { cn } from '@/shared/lib/utils'
 
 type CheckboxProps = {
    label: string
+   iconPosition?: 'left' | 'right'
+   icon?: ExoticComponent<LucideProps>
 } & React.ComponentProps<typeof CheckboxPrimitive.Root>
 
-function Checkbox({ className, label, disabled, id, ...props }: CheckboxProps) {
+function Checkbox({
+   className,
+   label,
+   disabled,
+   icon: Icon,
+   iconPosition = 'right',
+   id,
+   ...props
+}: CheckboxProps) {
    const generatedId = useId()
    const checkboxId = id ?? generatedId
 
@@ -50,11 +63,19 @@ function Checkbox({ className, label, disabled, id, ...props }: CheckboxProps) {
                htmlFor={checkboxId}
                aria-disabled={disabled}
                className={`
-                  flex-1 cursor-pointer leading-none
+                  flex flex-1 cursor-pointer items-center gap-1.5 leading-none
                   aria-disabled:pointer-events-none aria-disabled:opacity-50
+                  [&_svg]:pointer-events-none [&_svg]:shrink-0
+                  [&_svg:not([class*='size-'])]:size-4.5
                `}
             >
-               {label}
+               <span className={cn(iconPosition === 'left' && 'order-1')}>{label}</span>
+
+               {!!Icon && (
+                  <span className={cn(iconPosition === 'left' && 'order-0')}>
+                     <Icon />
+                  </span>
+               )}
             </label>
          )}
       </div>
