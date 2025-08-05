@@ -6,6 +6,7 @@ import { Nunito } from 'next/font/google'
 
 import '@/app/globals.css'
 import { Providers } from '@/app/providers'
+import { Header } from '@/widgets/header'
 
 const nunito = Nunito({
    variable: '--font-nunito',
@@ -28,14 +29,18 @@ export default function RootLayout({
    children: ReactNode
 }>) {
    return (
-      <html lang={'en'} suppressHydrationWarning>
+      <html lang={'ru'} suppressHydrationWarning>
          <body
             className={`
                ${nunito.variable}
                antialiased
             `}
          >
-            <Providers>{children}</Providers>
+            <Providers>
+               <Header />
+
+               <main>{children}</main>
+            </Providers>
          </body>
       </html>
    )
