@@ -8,17 +8,47 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
+enum OrderStatus {
+  PENDING
+  SUCCESSED
+  CANCELED
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
   id String @id @default(uuid())
 
   fullName String @db.VarChar(60)
   email    String @unique
   password String
+  role     Role   @default(USER)
+
+  provider   String?
+  providerId String?
+
+  verifiedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  cart             Cart?
+  orders           Order[]
+  verificationCode VerificationCode?
+
+  @@index([email])
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([email])
+  products Product[]
 }
 
 model Product {
@@ -29,4 +59,142 @@ model Product {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  items       ProductItem[]
+  ingredients Ingredient[]
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@index([categoryId])
+}
+
+model ProductItem {
+  id Int @id @default(autoincrement())
+
+  price Int
+  size  Int?
+  type  Int?
+
+  cartItems CartItem[]
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model Ingredient {
+  id Int @id @default(autoincrement())
+
+  name     String  @db.VarChar(60)
+  price    Int
+  imageUrl String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products  Product[]
+  cartItems CartItem[]
+}
+
+model Cart {
+  id String @id @default(uuid())
+
+  token       String
+  totalAmount Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items CartItem[]
+
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, token])
+  @@index([userId])
+  @@index([token])
+}
+
+model CartItem {
+  id Int @id @default(autoincrement())
+
+  quantity Int @default(1)
+
+  ingredients Ingredient[]
+
+  productItemId Int
+  productItem   ProductItem @relation(fields: [productItemId], references: [id], onDelete: Cascade)
+
+  cartId String
+  cart   Cart   @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  @@index([productItemId])
+  @@index([cartId])
+}
+
+model Order {
+  id        String  @id @default(uuid())
+  number    Int     @unique @default(autoincrement())
+  paymentId String?
+
+  fullName String
+  address  String
+  email    String
+  phone    String
+  comment  String?
+
+  token       String
+  totalAmount Int
+  status      OrderStatus
+
+  items Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([number])
+  @@index([paymentId])
+  @@index([userId])
+  @@index([status])
+  @@index([phone])
+}
+
+model VerificationCode {
+  id String @id @default(uuid())
+
+  code String
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@unique([userId, code])
+  @@index([userId])
+}
+
+model Story {
+  id              Int     @id @default(autoincrement())
+  previewImageUrl String?
+
+  createdAt DateTime @default(now())
+
+  items StoryItem[]
+}
+
+model StoryItem {
+  id Int @id @default(autoincrement())
+
+  sourceUrl String
+
+  createdAt DateTime @default(now())
+
+  storyId Int
+  story   Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
 }
