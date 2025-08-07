@@ -8,6 +8,12 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
+enum ProductStatus {
+  NEW
+  HIT
+  REGULAR
+}
+
 enum OrderStatus {
   PENDING
   SUCCESSED
@@ -54,8 +60,10 @@ model Category {
 model Product {
   id Int @id @default(autoincrement())
 
-  name     String  @db.VarChar(60)
-  imageUrl String?
+  name        String        @db.VarChar(60)
+  description String?
+  imageUrl    String?
+  status      ProductStatus @default(NEW)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -72,9 +80,10 @@ model Product {
 model ProductItem {
   id Int @id @default(autoincrement())
 
-  price Int
-  size  Int?
-  type  Int?
+  price    Int
+  imageUrl String?
+  size     Int?
+  type     Int?
 
   cartItems CartItem[]
 
