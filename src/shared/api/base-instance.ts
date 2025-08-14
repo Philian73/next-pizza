@@ -1,6 +1,8 @@
-import ky from 'ky'
+import type { ApiPaths } from './schema'
 
-export const baseInstance = ky.create({
-   prefixUrl: process.env.NEXT_PUBLIC_API_URL,
+import createFetchClient from 'openapi-fetch'
+
+export const baseInstance = createFetchClient<ApiPaths>({
+   baseUrl: process.env.NEXT_PUBLIC_API_URL,
    credentials: 'include',
 })
