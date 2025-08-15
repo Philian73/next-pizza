@@ -1,0 +1,40 @@
+schemas:
+  Category:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      slug:
+        type: string
+        example: "zavtrak"
+      name:
+        type: string
+        example: "Завтрак"
+      createdAt:
+        type: string
+        format: date-time
+        example: "2025-08-14T12:34:56Z"
+      updatedAt:
+        type: string
+        format: date-time
+        example: "2025-08-14T12:34:56Z"
+    required:
+      - id
+      - slug
+      - name
+      - createdAt
+      - updatedAt
+
+getCategories:
+  operationId: getCategories
+  summary: Get all categories
+  responses:
+    '200':
+      description: List of categories
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/schemas/Category'

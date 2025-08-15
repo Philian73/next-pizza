@@ -1,0 +1,137 @@
+schemas:
+  Product:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32\
+      slug:
+        type: string
+        example: "latte"
+      name:
+        type: string
+        maxLength: 60
+        example: "Latte"
+      description:
+        type: string
+        nullable: true
+        example: "A freshly brewed cup of coffee"
+      imageUrl:
+        type: string
+        nullable: true
+        format: uri
+        example: "https://example.com/images/coffee.png"
+      status:
+        type: string
+        enum:
+          - NEW
+          - HIT
+          - REGULAR
+        example: HIT
+      category:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int32
+          name:
+            type: string
+            maxLength: 60
+            example: "Breakfast"
+        required:
+          - id
+          - name
+      createdAt:
+        type: string
+        format: date-time
+        example: "2025-08-14T12:34:56Z"
+      updatedAt:
+        type: string
+        format: date-time
+        example: "2025-08-14T12:34:56Z"
+      items:
+        type: array
+        items:
+          $ref: "#/schemas/ProductItem"
+    required:
+      - id
+      - slug
+      - name
+      - description
+      - imageUrl
+      - status
+      - category
+      - createdAt
+      - updatedAt
+      - items
+
+  ProductItem:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      price:
+        type: number
+      imageUrl:
+        type: string
+        nullable: true
+        format: uri
+        example: "https://example.com/images/coffee.png"
+      type:
+        type: integer
+        nullable: true
+      size:
+        type: number
+        nullable: true
+      productId:
+        type: integer
+        format: int32
+    required:
+      - id
+      - price
+      - imageUrl
+      - type
+      - size
+      - productId
+
+  ProductsList:
+    type: array
+    items:
+      $ref: '#/schemas/Product'
+
+getProducts:
+  operationId: getProducts
+  summary: Get all products
+  parameters:
+    - name: name
+      in: query
+      required: false
+      schema:
+        type: string
+  responses:
+    '200':
+      description: List of products
+      content:
+        application/json:
+          schema:
+            $ref: '#/schemas/ProductsList'
+
+getProductBySlug:
+  operationId: getProductBySlug
+  summary: Get product by slug
+  parameters:
+    - name: slug
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Product
+      content:
+        application/json:
+          schema:
+            $ref: '#/schemas/Product'
+    '404':
+      $ref: '../shared/responses.yaml#/NotFoundError'
