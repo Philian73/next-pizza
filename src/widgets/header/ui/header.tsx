@@ -13,12 +13,14 @@ import { Typography } from '@/shared/ui/typography'
 
 import logo from '~/public/logo.png'
 
+import { ProductSearch } from './product-search'
+
 type HeaderProps = Omit<ComponentProps<'header'>, 'children'>
 
 export const Header = ({ className, ...rest }: HeaderProps) => {
    return (
       <header className={cn('border-b', className)} {...rest}>
-         <Container className={`flex items-center justify-between py-8`}>
+         <Container className={`flex items-center justify-between gap-3 py-8`}>
             <div className={'group flex items-center gap-3'}>
                <Image src={logo} alt={'Логотип'} width={35} height={35} />
 
@@ -35,6 +37,8 @@ export const Header = ({ className, ...rest }: HeaderProps) => {
                   <Typography variant={'lead'}>&copy;Philian73, идея Archakov</Typography>
                </Link>
             </div>
+
+            <ProductSearch />
 
             <div className={`flex items-center gap-1.5`}>
                <Button variant={'outline'}>
