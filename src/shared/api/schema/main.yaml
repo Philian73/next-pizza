@@ -1,0 +1,22 @@
+openapi: 3.1.0
+info:
+  title: Next Pizza API
+  description: API for a Next Pizza application, clone DodoPizza
+  version: 1.0.0
+
+paths:
+  /categories:
+    get:
+      $ref: "./endpoints/categories.yaml#/getCategories"
+
+  /products:
+    get:
+      $ref: "./endpoints/products.yaml#/getProducts"
+
+  /products/{slug}:
+    get:
+      $ref: "./endpoints/products.yaml#/getProductBySlug"
+
+  /ingredients:
+    get:
+      $ref: "./endpoints/ingredients.yaml#/getIngredients"
