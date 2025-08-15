@@ -19,7 +19,7 @@ import {
    CommandShortcut,
 } from '@/shared/ui/shadcn/command'
 
-type Item = {
+type CommandSearchItem = {
    label: string
    href: string
    groupBy?: string | null
@@ -27,11 +27,14 @@ type Item = {
 }
 
 type CommandSearchProps = {
-   items: Item[]
-   search?: string
-   defaultSearch?: string
-   onSearchChange?: (value: string) => void
    shortcutKey?: 'k' | 'j' | 'l'
+   items: CommandSearchItem[]
+   defaultOpen?: boolean
+   defaultSearch?: string
+   open?: boolean
+   search?: string
+   onOpenChange?: (value: boolean) => void
+   onSearchChange?: (value: string) => void
    manualSearch?: boolean
    classNames?: Record<string, string>
 }
@@ -39,32 +42,37 @@ type CommandSearchProps = {
 const CommandSearch = ({
    items,
    classNames,
+   open: controlledOpen,
+   onOpenChange,
    search: controlledSearch,
    onSearchChange,
    defaultSearch,
    shortcutKey = 'k',
+   defaultOpen = false,
    manualSearch = false,
 }: CommandSearchProps) => {
    const router = useRouter()
 
-   const [open, setOpen] = useState(false)
+   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen ?? false)
    const [uncontrolledSearch, setUncontrolledSearch] = useState(defaultSearch ?? '')
 
+   const open = controlledOpen ?? uncontrolledOpen
    const search = controlledSearch ?? uncontrolledSearch
    const setSearch = onSearchChange ?? setUncontrolledSearch
+   const setOpen = onOpenChange ?? setUncontrolledOpen
 
    useEffect(() => {
       const down = (e: KeyboardEvent) => {
          if (e.key === shortcutKey && (e.metaKey || e.ctrlKey)) {
             e.preventDefault()
-            setOpen(open => !open)
+            setOpen(!open)
          }
       }
 
       document.addEventListener('keydown', down)
 
       return () => document.removeEventListener('keydown', down)
-   }, [shortcutKey])
+   }, [shortcutKey, open, setOpen])
 
    const groupedItems = useMemo(() => {
       return items.reduce(
@@ -79,14 +87,14 @@ const CommandSearch = ({
 
             return acc
          },
-         {} as Record<string, Item[]>
+         {} as Record<string, CommandSearchItem[]>
       )
    }, [items])
 
    return (
       <div className={cn('flex-1', classNames?.root)}>
          <button
-            onClick={() => setOpen(open => !open)}
+            onClick={() => setOpen(!open)}
             type={'button'}
             className={`
                flex h-10 w-full min-w-0 flex-1 items-center gap-3 rounded-md border border-input
@@ -136,8 +144,8 @@ const CommandSearch = ({
                            asChild
                            className={'cursor-pointer'}
                            onSelect={() => {
-                              setOpen(false)
                               router.push(item.href)
+                              setOpen(false)
                            }}
                            key={index}
                         >
@@ -199,12 +207,16 @@ const CommandSearch = ({
    )
 }
 
+function escapeRegex(s: string) {
+   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 function highlightMatch(text: string, query: string) {
    if (!query) {
       return [<span key={0}>{text}</span>]
    }
 
-   const regex = new RegExp(`(${query})`, 'gi')
+   const regex = new RegExp(`(${escapeRegex(query)})`, 'gi')
    const parts = text.split(regex)
 
    return parts.map((part, i) =>
@@ -218,4 +230,5 @@ function highlightMatch(text: string, query: string) {
    )
 }
 
+export type { CommandSearchProps, CommandSearchItem }
 export { CommandSearch }
