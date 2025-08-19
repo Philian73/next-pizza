@@ -19,14 +19,14 @@ type CheckboxGroupProps = {
    options: CheckboxGroupItem[]
    limit?: number
    searchPlaceholder?: string
-   title?: string
+   heading?: string
 } & Omit<ComponentProps<'div'>, 'children'>
 
 export const CheckboxGroup = ({
    options,
    searchPlaceholder = 'Поиск...',
    limit = 5,
-   title,
+   heading,
    className,
    ...rest
 }: CheckboxGroupProps) => {
@@ -50,9 +50,9 @@ export const CheckboxGroup = ({
 
    return (
       <div className={cn('flex flex-col items-start gap-4', className)} {...rest}>
-         {!!title && (
+         {!!heading && (
             <Typography as={'span'} className={'font-bold'}>
-               {title}
+               {heading}
             </Typography>
          )}
 
