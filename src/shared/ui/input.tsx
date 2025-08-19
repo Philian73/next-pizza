@@ -140,7 +140,7 @@ const Input = ({
                      dark:aria-invalid:ring-destructive/40
                   `,
                   startIcon && 'pl-11.5',
-                  endIcon && 'pr-11.5',
+                  (endIcon || onEndIconClick) && 'pr-11.5',
                   classNames?.input
                )}
                id={inputId}
