@@ -38,6 +38,7 @@ schemas:
       $ref: '#/schemas/Ingredient'
 
 getIngredients:
+  operationId: getIngredients
   summary: Get all ingredients
   responses:
     '200':
