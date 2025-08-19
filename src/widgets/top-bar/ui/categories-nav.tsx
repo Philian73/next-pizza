@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from 'react'
 
-import type { CategoryItem } from '../model/constants'
+import type { CategoryItem } from '../model/tob-bar-types'
 
 import { ChevronDownIcon } from 'lucide-react'
 
@@ -17,7 +17,6 @@ import {
 } from '@/shared/ui/shadcn/dropdown-menu'
 
 import { useCategoryNavStore } from '../model/category-nav-store'
-import { CATEGORIES } from '../model/constants'
 
 // =======================================================================================
 type CategoryNavLinkProps = {
@@ -89,6 +88,7 @@ const CategoryNavItem = ({ item, isActive }: CategoryNavItemProps) => {
 
 // =======================================================================================
 type CategoriesNavProps = {
+   items: CategoryItem[]
    classNames?: {
       root?: string
       list?: string
@@ -96,8 +96,8 @@ type CategoriesNavProps = {
    }
 } & Omit<ComponentProps<'nav'>, 'className' | 'children'>
 
-export const CategoriesNav = ({ classNames, ...rest }: CategoriesNavProps) => {
-   const activeId = useCategoryNavStore(state => state.activeId)
+export const CategoriesNav = ({ classNames, items, ...rest }: CategoriesNavProps) => {
+   const activeCategory = useCategoryNavStore(state => state.activeCategory)
 
    return (
       <nav className={classNames?.root} {...rest}>
@@ -111,10 +111,10 @@ export const CategoriesNav = ({ classNames, ...rest }: CategoriesNavProps) => {
                classNames?.list
             )}
          >
-            {CATEGORIES.map((category, index) => (
+            {items.map((item, index) => (
                <li
                   data-slot={'category-nav-menu-item'}
-                  key={category.label}
+                  key={item.label}
                   className={cn(
                      `
                         group inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center
@@ -137,7 +137,10 @@ export const CategoriesNav = ({ classNames, ...rest }: CategoriesNavProps) => {
                      classNames?.listItem
                   )}
                >
-                  <CategoryNavItem isActive={index + 1 === activeId} item={category} />
+                  <CategoryNavItem
+                     isActive={item.slug === activeCategory || (index === 0 && !activeCategory)}
+                     item={item}
+                  />
                </li>
             ))}
          </ul>

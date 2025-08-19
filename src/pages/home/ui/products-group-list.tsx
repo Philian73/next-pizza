@@ -12,18 +12,18 @@ import { Typography } from '@/shared/ui/typography'
 import { useCategoryNavStore } from '@/widgets/top-bar'
 
 type ProductsGroupListProps = {
-   title: string
+   heading: string
    products: Product[]
-   categoryId: number
+   categorySlug: string
 } & Omit<ComponentProps<'section'>, 'children' | 'ref'>
 
 export const ProductsGroupList = ({
-   title,
-   categoryId,
+   heading,
+   categorySlug,
    products,
    ...rest
 }: ProductsGroupListProps) => {
-   const setActiveId = useCategoryNavStore(state => state.setActiveId)
+   const setActiveCategory = useCategoryNavStore(state => state.setActiveCategory)
 
    const intersectionRef = useRef<HTMLDivElement>(null)
    const intersection = useIntersection(intersectionRef, {
@@ -32,14 +32,14 @@ export const ProductsGroupList = ({
 
    useEffect(() => {
       if (intersection?.isIntersecting) {
-         setActiveId(categoryId)
+         setActiveCategory(categorySlug)
       }
-   }, [categoryId, setActiveId, title, intersection?.isIntersecting])
+   }, [categorySlug, setActiveCategory, intersection?.isIntersecting])
 
    return (
-      <section id={title} {...rest} ref={intersectionRef}>
+      <section id={categorySlug} {...rest} ref={intersectionRef}>
          <Typography className={'mb-5'} variant={'h2'}>
-            {title}
+            {heading}
          </Typography>
 
          <div className={'grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-12.5'}>

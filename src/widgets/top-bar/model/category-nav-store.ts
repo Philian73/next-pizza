@@ -1,11 +1,11 @@
 import { create } from 'zustand/react'
 
 type CategoryNavStoreState = {
-   activeId: number
-   setActiveId: (id: number) => void
+   activeCategory: string
+   setActiveCategory: (id: string) => void
 }
 
 export const useCategoryNavStore = create<CategoryNavStoreState>()(set => ({
-   activeId: 1,
-   setActiveId: (activeId: number) => set({ activeId }),
+   activeCategory: '',
+   setActiveCategory: (activeCategory: string) => set({ activeCategory }),
 }))
