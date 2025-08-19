@@ -41,7 +41,7 @@ export const CheckboxGroup = ({
       return showAll ? filtered : filtered.slice(0, limit)
    }, [options, searchValue, showAll, limit])
 
-   const shouldShowToggle = options.length > limit
+   const shouldShowToggle = options.length > limit && visibleItems.length > 0
 
    const handleToggle = () => {
       setSearchValue('')
@@ -66,7 +66,7 @@ export const CheckboxGroup = ({
             />
          )}
 
-         <ScrollArea className={'w-full'}>
+         <ScrollArea type={'auto'} className={'w-full'}>
             <ul className={'flex max-h-96 flex-col gap-4 pr-2'}>
                {visibleItems.map((item, index) => (
                   <li className={'inline-flex'} key={index}>
