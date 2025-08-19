@@ -18,9 +18,7 @@ async function createCategories() {
    for (const category of CATEGORIES) {
       let slug = slugify(category.name, {
          lower: true,
-         remove: /[*+~.()'"!:@]/g,
-         replacement: '-',
-         strict: false,
+         strict: true,
          trim: true,
       })
 
@@ -51,9 +49,7 @@ async function createProducts() {
 
       const baseSlug = slugify(product.name, {
          lower: true,
-         remove: /[*+~.()'"!:@]/g,
-         replacement: '-',
-         strict: false,
+         strict: true,
          trim: true,
       })
 
