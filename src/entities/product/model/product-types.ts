@@ -16,6 +16,7 @@ type ProductItem = {
 
 export type Product = {
    id: number
+   slug: string
    name: string
    description: string | null
    imageUrl: string | null

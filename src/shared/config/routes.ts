@@ -1,5 +1,5 @@
 export const PATHS = {
    home: '/',
    products: '/product',
-   product: (id: string | number) => `/product/${id}`,
+   product: (slug: string) => `/product/${slug}`,
 } as const

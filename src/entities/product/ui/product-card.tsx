@@ -21,7 +21,7 @@ type ProductCardProps = {
 } & Omit<ComponentProps<'article'>, 'children'>
 
 export const ProductCard = ({ className, product, ...rest }: ProductCardProps) => {
-   const link = PATHS.product(product.id)
+   const link = PATHS.product(product.slug)
 
    return (
       <article className={cn('flex flex-col gap-3', className)} {...rest}>
