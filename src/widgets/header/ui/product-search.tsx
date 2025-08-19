@@ -37,7 +37,7 @@ export const ProductSearch = () => {
    const productsItems: CommandSearchItem[] = (products ?? []).map(product => ({
       label: product.name,
       imageUrl: product.imageUrl,
-      href: PATHS.product(product.id),
+      href: PATHS.product(product.slug),
       groupBy: product.category.name,
    }))
 
