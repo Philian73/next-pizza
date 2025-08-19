@@ -1,0 +1,22 @@
+GET http://localhost:3000/api/users
+Accept: application/json
+
+###
+
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "fullName": "Николай Филиан",
+  "email": "Philian73@gmail.com",
+  "password": "@123qwe"
+}
+
+###
+
+DELETE http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "id": "80df2171-f5de-4a91-a693-8db3d091051d"
+}
