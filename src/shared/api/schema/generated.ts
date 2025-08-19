@@ -149,6 +149,7 @@ export interface components {
          category: {
             /** Format: int32 */
             id: number
+            slug: string
             /** @example Breakfast */
             name: string
          }

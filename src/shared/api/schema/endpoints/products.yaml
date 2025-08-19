@@ -34,12 +34,15 @@ schemas:
           id:
             type: integer
             format: int32
+          slug:
+            type: string
           name:
             type: string
             maxLength: 60
             example: "Breakfast"
         required:
           - id
+          - slug
           - name
       createdAt:
         type: string

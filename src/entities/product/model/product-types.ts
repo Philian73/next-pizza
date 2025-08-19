@@ -23,6 +23,7 @@ export type Product = {
    createdAt: string
    category: {
       id: number
+      slug: string
       name: string
    }
    updatedAt: string
