@@ -4,7 +4,7 @@ import type { ComponentProps } from 'react'
 
 import type { CheckboxProps } from '@/shared/ui/shadcn/checkbox'
 
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { cn } from '@/shared/lib/utils'
 import { InputSearch } from '@/shared/ui/input'
@@ -13,23 +13,33 @@ import { Checkbox } from '@/shared/ui/shadcn/checkbox'
 import { ScrollArea } from '@/shared/ui/shadcn/scroll-area'
 import { Typography } from '@/shared/ui/typography'
 
-export type CheckboxGroupItem = CheckboxProps
+export type CheckboxGroupItem = {
+   value: string
+} & Omit<CheckboxProps, 'value' | 'onCheckedChange' | 'checked'>
 
-type CheckboxGroupProps = {
+type Mode = 'single' | 'multiple'
+
+type CheckboxGroupProps<T = string> = {
    options: CheckboxGroupItem[]
+   selected: T | T[]
+   onChange: (value: T | T[] | null) => void
    limit?: number
    searchPlaceholder?: string
    heading?: string
+   mode?: Mode
 } & Omit<ComponentProps<'div'>, 'children'>
 
-export const CheckboxGroup = ({
+export const CheckboxGroup = <T extends string | number>({
    options,
+   selected,
+   onChange,
    searchPlaceholder = 'Поиск...',
    limit = 5,
    heading,
    className,
+   mode = 'multiple',
    ...rest
-}: CheckboxGroupProps) => {
+}: CheckboxGroupProps<T>) => {
    const [showAll, setShowAll] = useState(false)
    const [searchValue, setSearchValue] = useState('')
 
@@ -43,10 +53,27 @@ export const CheckboxGroup = ({
 
    const shouldShowToggle = options.length > limit && visibleItems.length > 0
 
-   const handleToggle = () => {
+   const handleCheckedChange = useCallback(
+      (value: T) => {
+         if (mode === 'multiple') {
+            const selectedArray = Array.isArray(selected) ? selected : []
+
+            if (selectedArray.includes(value)) {
+               return onChange(selectedArray.filter(v => v !== value))
+            }
+
+            return onChange([...selectedArray, value])
+         } else {
+            return onChange(selected === value ? null : value)
+         }
+      },
+      [onChange, selected, mode]
+   )
+
+   const handleToggle = useCallback(() => {
       setSearchValue('')
       setShowAll(prev => !prev)
-   }
+   }, [])
 
    return (
       <div className={cn('flex flex-col items-start gap-4', className)} {...rest}>
@@ -68,11 +95,21 @@ export const CheckboxGroup = ({
 
          <ScrollArea type={'auto'} className={'w-full'}>
             <ul className={'flex max-h-96 flex-col gap-4 pr-2'}>
-               {visibleItems.map((item, index) => (
-                  <li className={'inline-flex'} key={index}>
-                     <Checkbox {...item} />
-                  </li>
-               ))}
+               {visibleItems.map(item => {
+                  const isChecked = Array.isArray(selected)
+                     ? selected.includes(item.value as T)
+                     : selected === item.value
+
+                  return (
+                     <li className={'inline-flex'} key={item.label + item.value}>
+                        <Checkbox
+                           {...item}
+                           checked={isChecked}
+                           onCheckedChange={() => handleCheckedChange(item.value as T)}
+                        />
+                     </li>
+                  )
+               })}
             </ul>
          </ScrollArea>
 
