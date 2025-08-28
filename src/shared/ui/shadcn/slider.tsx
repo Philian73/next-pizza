@@ -27,6 +27,13 @@ function Slider({
          value={value}
          min={min}
          max={max}
+         // "onValueCommit" did not work with [0, 0] value, FIX:
+         // https://github.com/radix-ui/primitives/issues/1760#issuecomment-1764234638
+         onLostPointerCapture={() => {
+            if (props?.onValueCommit && value?.[0] === 0 && value?.[1] === 0) {
+               props?.onValueCommit([0, 0])
+            }
+         }}
          className={cn(
             `
                relative flex w-full touch-none items-center select-none
