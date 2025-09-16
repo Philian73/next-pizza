@@ -9,169 +9,328 @@ datasource db {
 }
 
 model User {
-  id               String            @id @default(uuid())
-  fullName         String            @db.VarChar(60)
-  email            String            @unique
-  password         String
-  role             Role              @default(USER)
-  provider         String?
-  providerId       String?
-  verifiedAt       DateTime?
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  id String @id @default(uuid())
+
+  email    String @unique
+  password String
+
+  fullName String @map("full_name")
+
+  role Role @default(USER)
+
+  provider   String?
+  providerId String? @map("provider_id")
+
+  isVerified Boolean @default(false) @map("is_verified")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
   cart             Cart?
   orders           Order[]
   verificationCode VerificationCode?
 
-  @@index([email])
+  @@index([providerId])
+  @@map("users")
 }
 
 model Category {
-  id        Int       @id @default(autoincrement())
-  slug      String    @unique
-  name      String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  products  Product[]
+  id String @id @default(cuid())
 
-  @@index([slug])
-}
+  name        String
+  slug        String  @unique
+  description String? @db.Text
 
-model Product {
-  id          Int           @id @default(autoincrement())
-  slug        String        @unique
-  name        String        @db.VarChar(60)
-  description String?
-  imageUrl    String?
-  status      ProductStatus @default(NEW)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  categoryId  Int
-  category    Category      @relation(fields: [categoryId], references: [id])
-  items       ProductItem[]
-  ingredients Ingredient[]  @relation("IngredientToProduct")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@index([slug])
-  @@index([categoryId])
-}
+  products Product[]
 
-model ProductItem {
-  id        Int        @id @default(autoincrement())
-  price     Int
-  imageUrl  String?
-  size      Int?
-  type      Int?
-  productId Int
-  cartItems CartItem[]
-  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@index([productId])
+  @@map("categories")
 }
 
 model Ingredient {
-  id        Int        @id @default(autoincrement())
-  name      String     @db.VarChar(60)
-  price     Int
-  imageUrl  String?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  cartItems CartItem[] @relation("CartItemToIngredient")
-  products  Product[]  @relation("IngredientToProduct")
+  id String @id @default(cuid())
+
+  name         String  @unique
+  displayName  String? @map("display_name")
+  thumbnailUrl String? @map("thumbnail_url")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  toppings                    Topping[]
+  productVariationIngredients ProductVariationIngredient[]
+  cartItemRemovedIngredients  CartItemRemovedIngredient[]
+
+  @@map("ingredients")
 }
 
-model Cart {
-  id          String     @id @default(uuid())
-  token       String
-  totalAmount Int        @default(0)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  userId      String?    @unique
-  user        User?      @relation(fields: [userId], references: [id])
-  items       CartItem[]
+model Topping {
+  id String @id @default(cuid())
 
-  @@unique([userId, token])
-  @@index([userId])
-  @@index([token])
+  ingredientId String     @unique @map("ingredient_id")
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  prices           ToppingPriceBySize[]
+  cartItemToppings CartItemTopping[]
+
+  @@map("toppings")
 }
 
-model CartItem {
-  id            Int          @id @default(autoincrement())
-  quantity      Int          @default(1)
-  productItemId Int
-  cartId        String
-  cart          Cart         @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  productItem   ProductItem  @relation(fields: [productItemId], references: [id], onDelete: Cascade)
-  ingredients   Ingredient[] @relation("CartItemToIngredient")
+model ToppingPriceBySize {
+  toppingId String  @map("topping_id")
+  topping   Topping @relation(fields: [toppingId], references: [id], onDelete: Cascade)
 
-  @@index([productItemId])
-  @@index([cartId])
+  sizeId String @map("size_id")
+  size   Size   @relation(fields: [sizeId], references: [id], onDelete: Cascade)
+
+  price Decimal @db.Decimal(10, 2)
+
+  @@unique([toppingId, sizeId])
+  @@map("topping_prices_by_size")
 }
 
-model Order {
-  id          String      @id @default(uuid())
-  number      Int         @unique @default(autoincrement())
-  paymentId   String?
-  fullName    String
-  address     String
-  email       String
-  phone       String
-  comment     String?
-  token       String
-  totalAmount Int
-  status      OrderStatus
-  items       Json
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  userId      String?
-  user        User?       @relation(fields: [userId], references: [id])
+model Size {
+  id String @id @default(cuid())
 
-  @@index([number])
-  @@index([paymentId])
-  @@index([userId])
-  @@index([status])
-  @@index([phone])
+  name String
+
+  toppingPrices     ToppingPriceBySize[]
+  productVariations ProductVariation[]
+
+  @@map("sizes")
 }
 
-model VerificationCode {
-  id        String   @id @default(uuid())
-  code      String
-  userId    String   @unique
-  createdAt DateTime @default(now())
-  expiresAt DateTime
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Product {
+  id String @id @default(cuid())
 
-  @@unique([userId, code])
-  @@index([userId])
+  name             String
+  slug             String        @unique
+  description      String?       @db.Text
+  imageUrl         String?       @map("image_url")
+  status           ProductStatus @default(DEFAULT)
+  maxCountPerOrder Int?          @map("max_count_per_order")
+  price            Decimal?      @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  categoryId String   @map("category_id")
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  traits ProductTraits?
+
+  variations ProductVariation[]
+
+  @@map("products")
+}
+
+model ProductTraits {
+  productId String  @unique @map("product_id")
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  forChildren Boolean @default(false) @map("for_children")
+  vegan       Boolean @default(false)
+  spicy       Boolean @default(false)
+
+  @@map("product_traits")
+}
+
+model ProductVariation {
+  id String @id @default(cuid())
+
+  price    Decimal @db.Decimal(10, 2)
+  imageUrl String? @map("image_url")
+
+  sizeId String @map("size_id")
+  size   Size   @relation(fields: [sizeId], references: [id], onDelete: Cascade)
+
+  productId String  @map("product_id")
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  foodValue ProductVariationFoodValue?
+
+  ingredients ProductVariationIngredient[]
+  cartItems   CartItem[]
+
+  @@map("product_variations")
+}
+
+model ProductVariationIngredient {
+  ingredientId String     @map("ingredient_id")
+  details      Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+
+  choiceType ChoiceType @default(NONE) @map("choice_type")
+  isBasic    Boolean    @default(false) @map("is_basic")
+
+  variationId String           @map("variation_id")
+  variation   ProductVariation @relation(fields: [variationId], references: [id], onDelete: Cascade)
+
+  @@id([variationId, ingredientId])
+  @@map("product_variation_ingredients")
+}
+
+model ProductVariationFoodValue {
+  variationId String           @unique
+  variation   ProductVariation @relation(fields: [variationId], references: [id], onDelete: Cascade)
+
+  calories      Float
+  carbohydrates Float
+  fats          Float
+  proteins      Float
+  weight        Float
+
+  @@map("product_variation_food_values")
 }
 
 model Story {
-  id              Int         @id @default(autoincrement())
-  previewImageUrl String?
-  createdAt       DateTime    @default(now())
-  items           StoryItem[]
+  id String @id @default(cuid())
+
+  previewImageUrl String? @map("preview_image_url")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  items StoryItem[]
+
+  @@map("stories")
 }
 
 model StoryItem {
-  id        Int      @id @default(autoincrement())
-  sourceUrl String
-  createdAt DateTime @default(now())
-  storyId   Int
-  story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  id String @id @default(cuid())
+
+  sourceUrl String @map("source_url")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  storyId String
+  story   Story  @relation(fields: [storyId], references: [id], onDelete: Cascade)
+
+  @@index([storyId])
+  @@map("story_items")
 }
 
-enum ProductStatus {
-  NEW
-  HIT
-  REGULAR
+model Cart {
+  id    String @id @default(cuid())
+  token String @unique
+
+  totalAmount Decimal @default(0) @map("total_amount") @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
+
+  items CartItem[]
+
+  @@map("carts")
 }
 
-enum OrderStatus {
-  PENDING
-  SUCCESSED
-  CANCELED
+model CartItem {
+  id       String @id @default(cuid())
+  quantity Int    @default(1)
+
+  cartId String
+  cart   Cart   @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  variationId String
+  variation   ProductVariation @relation(fields: [variationId], references: [id], onDelete: Cascade)
+
+  toppings           CartItemTopping[]
+  removedIngredients CartItemRemovedIngredient[]
+
+  @@map("cart_items")
+}
+
+model CartItemTopping {
+  cartItemId String
+  cartItem   CartItem @relation(fields: [cartItemId], references: [id], onDelete: Cascade)
+
+  toppingId String
+  topping   Topping @relation(fields: [toppingId], references: [id], onDelete: Cascade)
+
+  @@id([cartItemId, toppingId])
+  @@map("cart_item_toppings")
+}
+
+model CartItemRemovedIngredient {
+  cartItemId String
+  cartItem   CartItem @relation(fields: [cartItemId], references: [id], onDelete: Cascade)
+
+  ingredientId String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+
+  @@id([cartItemId, ingredientId])
+  @@map("cart_item_removed_ingredients")
+}
+
+model Order {
+  id     String @id @default(cuid())
+  number Int    @unique @default(autoincrement())
+
+  totalAmount Decimal     @db.Decimal(10, 2)
+  token       String
+  paymentId   String?     @map("payment_id")
+  status      OrderStatus
+  items       Json
+
+  fullName String @map("full_name")
+  address  String
+  email    String
+  phone    String
+  comment  String @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([phone])
+  @@map("orders")
+}
+
+model VerificationCode {
+  id   String @id @default(cuid())
+  code String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  expiresAt DateTime @map("expires_at")
+
+  userId String @unique @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([code])
+  @@map("verification_codes")
 }
 
 enum Role {
   USER
   ADMIN
+}
+
+enum ProductStatus {
+  DEFAULT
+  NEW
+  HIT
+  ARCHIVED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum ChoiceType {
+  NONE
+  SINGLE
+  MULTIPLE
 }

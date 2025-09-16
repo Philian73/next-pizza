@@ -31,4 +31,10 @@ export default [
          },
       },
    },
+   {
+      files: ['src/shared/lib/prisma/seed/**/*.{js,ts}'],
+      rules: {
+         'max-lines': ['error', 3000],
+      },
+   },
 ]
