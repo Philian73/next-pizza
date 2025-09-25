@@ -32,9 +32,9 @@ export default [
       },
    },
    {
-      files: ['src/shared/lib/prisma/seed/**/*.{js,ts}'],
+      files: ['src/shared/lib/prisma/seed/**/*.{js,ts}', 'src/shared/api/schema/generated.ts'],
       rules: {
-         'max-lines': ['error', 3000],
+         'max-lines': 'off',
       },
    },
 ]
