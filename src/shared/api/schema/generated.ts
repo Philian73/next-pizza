@@ -11,7 +11,7 @@ export interface paths {
          path?: never
          cookie?: never
       }
-      /** Get all categories */
+      /** Получение категорий */
       get: operations['getCategories']
       put?: never
       post?: never
@@ -28,7 +28,7 @@ export interface paths {
          path?: never
          cookie?: never
       }
-      /** Get all products */
+      /** Получение продуктов */
       get: operations['getProducts']
       put?: never
       post?: never
@@ -45,25 +45,8 @@ export interface paths {
          path?: never
          cookie?: never
       }
-      /** Get product by slug */
+      /** Получение продукта по slug */
       get: operations['getProductBySlug']
-      put?: never
-      post?: never
-      delete?: never
-      options?: never
-      head?: never
-      patch?: never
-      trace?: never
-   }
-   '/ingredients': {
-      parameters: {
-         query?: never
-         header?: never
-         path?: never
-         cookie?: never
-      }
-      /** Get all ingredients */
-      get: operations['getIngredients']
       put?: never
       post?: never
       delete?: never
@@ -76,108 +59,167 @@ export interface paths {
 export type webhooks = Record<string, never>
 export interface components {
    schemas: {
-      Category: {
-         /** Format: int32 */
-         id: number
-         /** @example zavtrak */
-         slug: string
-         /** @example Завтрак */
-         name: string
-         /**
-          * Format: date-time
-          * @example 2025-08-14T12:34:56Z
-          */
+      User: {
+         /** Format: uuid */
+         id: string
+         /** Format: email */
+         email: string
+         /** @example Андреев Андрей Андреевич */
+         fullName: string
+         /** @enum {string} */
+         role: 'USER' | 'ADMIN'
+         provider: string | null
+         providerId: string | null
+         isVerified: boolean
+         /** Format: date-time */
          createdAt: string
-         /**
-          * Format: date-time
-          * @example 2025-08-14T12:34:56Z
-          */
+         /** Format: date-time */
          updatedAt: string
       }
-      ProductItem: {
-         /** Format: int32 */
-         id: number
-         price: number
-         /**
-          * Format: uri
-          * @example https://example.com/images/coffee.png
-          */
-         imageUrl: string | null
-         type: number | null
-         size: number | null
-         /** Format: int32 */
-         productId: number
-      }
-      Product: {
-         /** Format: int32\ */
-         id: number
-         /** @example latte */
-         slug: string
-         /** @example Latte */
+      CategoryShort: {
+         id: components['schemas']['Cuid']
+         /** @example Пиццы */
          name: string
-         /** @example A freshly brewed cup of coffee */
+         /** @example piccy */
+         slug: string
+      }
+      Category: components['schemas']['CategoryShort'] & {
          description: string | null
-         /**
-          * Format: uri
-          * @example https://example.com/images/coffee.png
-          */
-         imageUrl: string | null
-         /**
-          * @example HIT
-          * @enum {string}
-          */
-         status: 'NEW' | 'HIT' | 'REGULAR'
-         category: {
-            /** Format: int32 */
-            id: number
-            slug: string
-            /** @example Breakfast */
-            name: string
-         }
-         /**
-          * Format: date-time
-          * @example 2025-08-14T12:34:56Z
-          */
+         /** Format: date-time */
          createdAt: string
-         /**
-          * Format: date-time
-          * @example 2025-08-14T12:34:56Z
-          */
+         /** Format: date-time */
          updatedAt: string
-         items: components['schemas']['ProductItem'][]
       }
-      ProductsList: components['schemas']['Product'][]
-      Error: {
-         message: string
-         code: string
+      Size: {
+         id: components['schemas']['Cuid']
+         /** @example 20 см */
+         name: string
       }
       Ingredient: {
-         /** Format: int32 */
-         id: number
-         /** @example bacon */
+         id: components['schemas']['Cuid']
+         /** @example Традиционное тесто 20 */
          name: string
-         price: number
-         /**
-          * Format: uri
-          * @example https://example.com/images/bacon.png
-          */
-         imageUrl: string | null
-         /**
-          * Format: date-time
-          * @example 2025-08-14T12:34:56Z
-          */
+         /** @example Традиционное */
+         displayName: string | null
+         /** Format: uri */
+         thumbnailUrl: string
+         /** Format: date-time */
          createdAt: string
-         /**
-          * Format: date-time
-          * @example 2025-08-14T12:34:56Z
-          */
+         /** Format: date-time */
          updatedAt: string
       }
-      IngredientsList: components['schemas']['Ingredient'][]
+      Product: {
+         id: components['schemas']['Cuid']
+         /** @example Пепперони */
+         name: string
+         /** @example pepperoni */
+         slug: string
+         description: string | null
+         /** Format: uri */
+         imageUrl: string | null
+         /** @enum {string} */
+         status: 'DEFAULT' | 'NEW' | 'HIT' | 'ARCHIVED'
+         /** Format: int32 */
+         maxCountPerOrder: number | null
+         /**
+          * Format: double
+          * @default null
+          */
+         price: number | null
+         /** Format: date-time */
+         createdAt: string
+         /** Format: date-time */
+         updatedAt: string
+         category: components['schemas']['CategoryShort']
+         traits: {
+            /** @default false */
+            vegan: boolean
+            /** @default false */
+            spicy: boolean
+            /** @default false */
+            forChildren: boolean
+         }
+         variations: components['schemas']['ProductVariation'][]
+      }
+      ProductDetail: components['schemas']['Product'] & {
+         variations?: components['schemas']['ProductVariationDetail'][]
+      }
+      ProductVariation: {
+         id: components['schemas']['Cuid']
+         /** Format: double */
+         price: number
+         /** Format: uri */
+         imageUrl: string | null
+         size: components['schemas']['Size']
+      }
+      ProductVariationDetail: components['schemas']['ProductVariation'] & {
+         foodValue: {
+            /** Format: double */
+            calories: number
+            /** Format: double */
+            proteins: number
+            /** Format: double */
+            fats: number
+            /** Format: double */
+            carbohydrates: number
+            /** Format: double */
+            weight: number
+         }
+         ingredients: components['schemas']['ProductVariationIngredient'][]
+      }
+      ProductVariationIngredient: {
+         ingredientId: components['schemas']['Cuid']
+         /** @enum {string} */
+         choiceType: 'NONE' | 'SINGLE' | 'MULTIPLE'
+         /** @default false */
+         isBasic: boolean
+         details: {
+            name: string
+            displayName: string | null
+            /** Format: uri */
+            thumbnailUrl: string | null
+         }
+      }
+      /** @description CUID identifier */
+      Cuid: string
+      ErrorMessage: {
+         message: string
+         /** Format: int32 */
+         code: number
+      }
+      ErrorFieldMessages: {
+         messages: {
+            /** @example password */
+            field: string
+            /** @example Пароль - обязательное поле! */
+            message: string
+         }[]
+         /** Format: int32 */
+         code: number
+      }
+      Error: components['schemas']['ErrorMessage'] | components['schemas']['ErrorFieldMessages']
    }
    responses: {
+      /** @description Bad Request */
+      400: {
+         headers: {
+            [name: string]: unknown
+         }
+         content: {
+            'application/json': components['schemas']['Error']
+         }
+      }
+      /** @description Unauthorized */
+      401: {
+         headers: {
+            [name: string]: unknown
+         }
+         content: {
+            'application/json': components['schemas']['Error']
+         }
+      }
       /** @description Resource not found */
-      NotFoundError: {
+      404: {
          headers: {
             [name: string]: unknown
          }
@@ -202,7 +244,7 @@ export interface operations {
       }
       requestBody?: never
       responses: {
-         /** @description List of categories */
+         /** @description Список категорий */
          200: {
             headers: {
                [name: string]: unknown
@@ -216,7 +258,22 @@ export interface operations {
    getProducts: {
       parameters: {
          query?: {
+            /** @description Поиск по названии продукта */
             name?: string
+            /** @description Строка, задающая поле для сортировки и направление.   **Формат:** `fieldName-direction` или `fieldName.subFieldName-direction`
+             *     **Доступные направления:**   - `asc` — по возрастанию   - `desc` — по убыванию
+             *     **Примеры:**   - `name-desc` — сортировка по названию (по убыванию)   - `created-asc` — сортировка по дате создания (по возрастанию)   - `author.name-asc` — сортировка по имени автора (по возрастанию)
+             *      */
+            orderBy?:
+               | null
+               | 'status-asc'
+               | 'status-desc'
+               | 'price-asc'
+               | 'price-desc'
+               | 'createdAt-asc'
+               | 'createdAt-desc'
+               | 'updatedAt-asc'
+               | 'updatedAt-desc'
          }
          header?: never
          path?: never
@@ -224,13 +281,13 @@ export interface operations {
       }
       requestBody?: never
       responses: {
-         /** @description List of products */
+         /** @description Список продуктов */
          200: {
             headers: {
                [name: string]: unknown
             }
             content: {
-               'application/json': components['schemas']['ProductsList']
+               'application/json': components['schemas']['Product'][]
             }
          }
       }
@@ -246,36 +303,16 @@ export interface operations {
       }
       requestBody?: never
       responses: {
-         /** @description Product */
+         /** @description Продукт получен */
          200: {
             headers: {
                [name: string]: unknown
             }
             content: {
-               'application/json': components['schemas']['Product']
+               'application/json': components['schemas']['ProductDetail']
             }
          }
-         404: components['responses']['NotFoundError']
-      }
-   }
-   getIngredients: {
-      parameters: {
-         query?: never
-         header?: never
-         path?: never
-         cookie?: never
-      }
-      requestBody?: never
-      responses: {
-         /** @description List of ingredients */
-         200: {
-            headers: {
-               [name: string]: unknown
-            }
-            content: {
-               'application/json': components['schemas']['IngredientsList']
-            }
-         }
+         404: components['responses']['404']
       }
    }
 }
