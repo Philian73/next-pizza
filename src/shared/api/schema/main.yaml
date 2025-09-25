@@ -63,7 +63,7 @@ paths:
             - `author.name-asc` — сортировка по имени автора (по возрастанию)  
           schema:
             type: string
-            enum: [null, status-asc, status-desc, price-asc, price-desc, createdAt-asc, createdAt-desc, updatedAt-asc, updatedAt-desc, updatedAt-desc]
+            enum: [null, status-asc, status-desc, price-asc, price-desc, createdAt-asc, createdAt-desc, updatedAt-asc, updatedAt-desc]
       responses:
         '200':
           description: Список продуктов
