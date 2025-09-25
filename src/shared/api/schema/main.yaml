@@ -1,22 +1,388 @@
-openapi: 3.1.0
+openapi: 3.0.4
 info:
   title: Next Pizza API
-  description: API for a Next Pizza application, clone DodoPizza
+  description: API для пет проекта - Next Pizza. Этакий "Клон" DodoPizza.
   version: 1.0.0
+  contact:
+    name: Philian73
+    email: philian73@gmail.com
+
+servers:
+  - url: http://localhost:3000/api
+    description: Локальная разработка
+  - url: https://api.nextpizza.ru/api
+    description: Релиз
+
+tags:
+  - name: category
+  - name: product
 
 paths:
   /categories:
     get:
-      $ref: "./endpoints/categories.yaml#/getCategories"
+      tags: [category]
+      summary: Получение категорий
+      operationId: getCategories
+      responses:
+        '200':
+          description: Список категорий
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: '#/components/schemas/Category'
 
   /products:
     get:
-      $ref: "./endpoints/products.yaml#/getProducts"
+      tags: [product]
+      summary: Получение продуктов
+      operationId: getProducts
+      parameters:
+        - name: name
+          description: Поиск по названии продукта
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: orderBy
+          in: query
+          required: false
+          description: >
+            Строка, задающая поле для сортировки и направление.  
+            **Формат:** `fieldName-direction` или `fieldName.subFieldName-direction`  
+
+            **Доступные направления:**  
+            - `asc` — по возрастанию  
+            - `desc` — по убыванию  
+
+            **Примеры:**  
+            - `name-desc` — сортировка по названию (по убыванию)  
+            - `created-asc` — сортировка по дате создания (по возрастанию)  
+            - `author.name-asc` — сортировка по имени автора (по возрастанию)  
+          schema:
+            type: string
+            enum: [null, status-asc, status-desc, price-asc, price-desc, createdAt-asc, createdAt-desc, updatedAt-asc, updatedAt-desc, updatedAt-desc]
+      responses:
+        '200':
+          description: Список продуктов
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 0
+                items:
+                  $ref: '#/components/schemas/Product'
 
   /products/{slug}:
     get:
-      $ref: "./endpoints/products.yaml#/getProductBySlug"
+      tags: [product]
+      summary: Получение продукта по slug
+      operationId: getProductBySlug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Продукт получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDetail'
+        '404':
+          $ref: '#/components/responses/404'
 
-  /ingredients:
-    get:
-      $ref: "./endpoints/ingredients.yaml#/getIngredients"
+components:
+  schemas:
+    User:
+      type: object
+      required: [id, email, fullName, role, provider, providerId, isVerified, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        fullName:
+          type: string
+          example: Андреев Андрей Андреевич
+        role:
+          type: string
+          enum: [USER, ADMIN]
+        provider:
+          type: string
+          nullable: true
+        providerId:
+          type: string
+          nullable: true
+        isVerified:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CategoryShort:
+      type: object
+      required: [id, name, slug]
+      properties:
+        id:
+          $ref: '#/components/schemas/Cuid'
+        name:
+          type: string
+          example: 'Пиццы'
+        slug:
+          type: string
+          example: 'piccy'
+    Category:
+      allOf:
+        - $ref: '#/components/schemas/CategoryShort'
+        - type: object
+          required: [description, createdAt, updatedAt]
+          properties:
+            description:
+              type: string
+              nullable: true
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+
+    Size:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          $ref: '#/components/schemas/Cuid'
+        name:
+          type: string
+          example: '20 см'
+
+    Ingredient:
+      type: object
+      required: [id, name, displayName, thumbnailUrl, createdAt, updatedAt]
+      properties:
+        id:
+          $ref: '#/components/schemas/Cuid'
+        name:
+          type: string
+          example: 'Традиционное тесто 20'
+        displayName:
+          type: string
+          nullable: true
+          example: 'Традиционное'
+        thumbnailUrl:
+          type: string
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Product:
+      type: object
+      required: [id, name, slug, description, imageUrl, status, maxCountPerOrder, price, createdAt, updatedAt, category, traits, variations]
+      properties:
+        id:
+          $ref: '#/components/schemas/Cuid'
+        name:
+          type: string
+          example: 'Пепперони'
+        slug:
+          type: string
+          example: 'pepperoni'
+        description:
+          type: string
+          nullable: true
+        imageUrl:
+          type: string
+          format: uri
+          nullable: true
+        status:
+          type: string
+          enum: [DEFAULT, NEW, HIT, ARCHIVED]
+        maxCountPerOrder:
+          type: integer
+          format: int32
+          nullable: true
+        price:
+          type: number
+          format: double
+          nullable: true
+          default: null
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        category:
+          $ref: '#/components/schemas/CategoryShort'
+        traits:
+          type: object
+          properties:
+            vegan:
+              type: boolean
+              default: false
+            spicy:
+              type: boolean
+              default: false
+            forChildren:
+              type: boolean
+              default: false
+        variations:
+          type: array
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/ProductVariation'
+    ProductDetail:
+      allOf:
+        - $ref: '#/components/schemas/Product'
+        - type: object
+          properties:
+            variations:
+              type: array
+              minItems: 0
+              items:
+                $ref: '#/components/schemas/ProductVariationDetail'
+
+    ProductVariation:
+      type: object
+      required: [id, price, imageUrl, size]
+      properties:
+        id:
+          $ref: '#/components/schemas/Cuid'
+        price:
+          type: number
+          format: double
+        imageUrl:
+          type: string
+          format: uri
+          nullable: true
+        size:
+          $ref: '#/components/schemas/Size'
+    ProductVariationDetail:
+      allOf:
+        - $ref: '#/components/schemas/ProductVariation'
+        - type: object
+          required: [foodValue, ingredients]
+          properties:
+            foodValue:
+              type: object
+              required: [calories, proteins, fats, carbohydrates, weight]
+              properties:
+                calories:
+                  type: number
+                  format: double
+                proteins:
+                  type: number
+                  format: double
+                fats:
+                  type: number
+                  format: double
+                carbohydrates:
+                  type: number
+                  format: double
+                weight:
+                  type: number
+                  format: double
+            ingredients:
+              type: array
+              minItems: 0
+              items:
+                $ref: '#/components/schemas/ProductVariationIngredient'
+
+    ProductVariationIngredient:
+      type: object
+      required: [ingredientId, choiceType, isBasic, details]
+      properties:
+        ingredientId:
+          $ref: '#/components/schemas/Cuid'
+        choiceType:
+          type: string
+          enum: [NONE, SINGLE, MULTIPLE]
+        isBasic:
+          type: boolean
+          default: false
+        details:
+          type: object
+          required: [name, displayName, thumbnailUrl]
+          properties:
+            name:
+              type: string
+            displayName:
+              type: string
+              nullable: true
+            thumbnailUrl:
+              type: string
+              format: uri
+              nullable: true
+
+    Cuid:
+      type: string
+      description: "CUID identifier"
+      pattern: '^c[a-z0-9]{24}$'
+
+    ErrorMessage:
+      type: object
+      required: [message, code]
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32
+    ErrorFieldMessages:
+      type: object
+      required: [messages, code]
+      properties:
+        messages:
+          type: array
+          items:
+            type: object
+            required: [field, message]
+            properties:
+              field:
+                type: string
+                example: "password"
+              message:
+                type: string
+                example: "Пароль - обязательное поле!"
+        code:
+          type: integer
+          format: int32
+    Error:
+      oneOf:
+        - $ref: '#/components/schemas/ErrorMessage'
+        - $ref: '#/components/schemas/ErrorFieldMessages'
+
+  responses:
+    400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    401:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    404:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
