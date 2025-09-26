@@ -11,7 +11,13 @@ import { Separator } from '@/shared/ui/shadcn/separator'
 import { CategoriesNav } from './categories-nav'
 
 export const TopBar = async () => {
-   const { data: categories } = await categoryApi.getCategories()
+   const { data: categories } = await categoryApi.getCategories({
+      params: {
+         query: {
+            onlyWithProducts: true,
+         },
+      },
+   })
 
    const items: CategoryItem[] = [
       ...(categories ?? []).map(category => ({
