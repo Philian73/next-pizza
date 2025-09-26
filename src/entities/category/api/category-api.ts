@@ -1,9 +1,12 @@
+import type { ApiOptions } from '@/shared/api'
+
 import { baseInstance } from '@/shared/api'
 
 export const categoryApi = {
-   async getCategories() {
+   async getCategories(options?: ApiOptions<'getCategories'>) {
       return await baseInstance.GET('/categories', {
-         next: { revalidate: 60 * 60 }, // 1 hour
+         ...options,
+         next: { revalidate: 60 * 60, ...options?.next }, // 1 hour
       })
    },
 }
