@@ -11,16 +11,31 @@ export async function GET(request: NextRequest) {
       omit: {
          categoryId: true,
       },
+
       include: {
-         items: true,
+         traits: {
+            omit: {
+               productId: true,
+            },
+         },
          category: {
-            select: {
-               id: true,
-               slug: true,
-               name: true,
+            omit: {
+               description: true,
+               createdAt: true,
+               updatedAt: true,
+            },
+         },
+         variations: {
+            omit: {
+               productId: true,
+               sizeId: true,
+            },
+            include: {
+               size: true,
             },
          },
       },
+
       where: {
          name: {
             contains: name,
