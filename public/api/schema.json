@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api",
+      "url": "/api",
       "description": "Локальная разработка"
     },
     {
@@ -35,6 +35,17 @@
         ],
         "summary": "Получение категорий",
         "operationId": "getCategories",
+        "parameters": [
+          {
+            "name": "onlyWithProducts",
+            "description": "Показывать только те категории, по которым был создан хотя бы один продукт",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Список категорий",
@@ -399,28 +410,105 @@
         }
       },
       "ProductDetail": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Product"
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "description",
+          "imageUrl",
+          "status",
+          "maxCountPerOrder",
+          "price",
+          "createdAt",
+          "updatedAt",
+          "category",
+          "traits",
+          "variations"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Cuid"
           },
-          {
+          "name": {
+            "type": "string",
+            "example": "Пепперони"
+          },
+          "slug": {
+            "type": "string",
+            "example": "pepperoni"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DEFAULT",
+              "NEW",
+              "HIT",
+              "ARCHIVED"
+            ]
+          },
+          "maxCountPerOrder": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "default": null
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "category": {
+            "$ref": "#/components/schemas/CategoryShort"
+          },
+          "traits": {
             "type": "object",
             "properties": {
-              "variations": {
-                "type": "array",
-                "minItems": 0,
-                "items": {
-                  "$ref": "#/components/schemas/ProductVariationDetail"
-                }
+              "vegan": {
+                "type": "boolean",
+                "default": false
+              },
+              "spicy": {
+                "type": "boolean",
+                "default": false
+              },
+              "forChildren": {
+                "type": "boolean",
+                "default": false
               }
             }
+          },
+          "variations": {
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "$ref": "#/components/schemas/ProductVariationDetail"
+            }
           }
-        ]
+        }
       },
       "ProductVariation": {
         "type": "object",
         "required": [
           "id",
+          "isDefault",
           "price",
           "imageUrl",
           "size"
@@ -428,6 +516,9 @@
         "properties": {
           "id": {
             "$ref": "#/components/schemas/Cuid"
+          },
+          "isDefault": {
+            "type": "boolean"
           },
           "price": {
             "type": "number",

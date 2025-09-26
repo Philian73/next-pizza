@@ -143,6 +143,8 @@ model ProductTraits {
 model ProductVariation {
   id String @id @default(cuid())
 
+  isDefault Boolean @default(false) @map("is_default")
+
   price    Decimal @db.Decimal(10, 2)
   imageUrl String? @map("image_url")
 

@@ -18,9 +18,11 @@ async function createCategories() {
 
    console.log(`Created: Categories`)
 
-   await prisma.category.createMany({
-      data: categories,
-   })
+   for (const category of categories) {
+      await prisma.category.create({
+         data: category,
+      })
+   }
 }
 
 async function createSizes() {
@@ -38,9 +40,11 @@ async function createIngredients() {
 
    console.log(`Created: Ingredients`)
 
-   await prisma.ingredient.createMany({
-      data: ingredients,
-   })
+   for (const ingredient of ingredients) {
+      await prisma.ingredient.create({
+         data: ingredient,
+      })
+   }
 }
 
 async function createToppings() {

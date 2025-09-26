@@ -141,11 +141,42 @@ export interface components {
          }
          variations: components['schemas']['ProductVariation'][]
       }
-      ProductDetail: components['schemas']['Product'] & {
-         variations?: components['schemas']['ProductVariationDetail'][]
+      ProductDetail: {
+         id: components['schemas']['Cuid']
+         /** @example Пепперони */
+         name: string
+         /** @example pepperoni */
+         slug: string
+         description: string | null
+         /** Format: uri */
+         imageUrl: string | null
+         /** @enum {string} */
+         status: 'DEFAULT' | 'NEW' | 'HIT' | 'ARCHIVED'
+         /** Format: int32 */
+         maxCountPerOrder: number | null
+         /**
+          * Format: double
+          * @default null
+          */
+         price: number | null
+         /** Format: date-time */
+         createdAt: string
+         /** Format: date-time */
+         updatedAt: string
+         category: components['schemas']['CategoryShort']
+         traits: {
+            /** @default false */
+            vegan: boolean
+            /** @default false */
+            spicy: boolean
+            /** @default false */
+            forChildren: boolean
+         }
+         variations: components['schemas']['ProductVariationDetail'][]
       }
       ProductVariation: {
          id: components['schemas']['Cuid']
+         isDefault: boolean
          /** Format: double */
          price: number
          /** Format: uri */
@@ -237,7 +268,10 @@ export type $defs = Record<string, never>
 export interface operations {
    getCategories: {
       parameters: {
-         query?: never
+         query?: {
+            /** @description Показывать только те категории, по которым был создан хотя бы один продукт */
+            onlyWithProducts?: boolean
+         }
          header?: never
          path?: never
          cookie?: never

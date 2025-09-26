@@ -28,6 +28,7 @@ type FoodValue = {
 
 type Variations = {
    sizeName: SizeName
+   isDefault?: boolean
    dough?: IngredientName
    imageUrl: string
    price: number
@@ -83,6 +84,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '30 см',
+            isDefault: true,
             dough: 'Традиционное тесто 30',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198da9ee2dd75038d9b6f7f23810d42.avif',
@@ -172,6 +174,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '30 см',
+            isDefault: true,
             dough: 'Традиционное тесто 30',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198bf24170179679a7872f2ddf16d18.avif',
@@ -266,6 +269,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '30 см',
+            isDefault: true,
             dough: 'Традиционное тесто 30',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198bf25089a74d08e08629b41ed39ee.avif',
@@ -360,6 +364,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '30 см',
+            isDefault: true,
             dough: 'Традиционное тесто 30',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198bf48e02377e9adc0b190c9676321.avif',
@@ -449,6 +454,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '30 см',
+            isDefault: true,
             dough: 'Традиционное тесто 30',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198bf40eb1171aabe90b1b3ce07c0c5.avif',
@@ -542,6 +548,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '30 см',
+            isDefault: true,
             dough: 'Традиционное тесто 30',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198bf283b2372ea8e7cfc8adae9ea84.avif',
@@ -635,6 +642,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '30 см',
+            isDefault: true,
             dough: 'Традиционное тесто 30',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198bf3e424371b49f0b8d7dbe320a70.avif',
@@ -732,6 +740,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '30 см',
+            isDefault: true,
             dough: 'Традиционное тесто 30',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198bf4d218b75d4a3e667fc2f6d7643.avif',
@@ -831,6 +840,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '30 см',
+            isDefault: true,
             dough: 'Традиционное тесто 30',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198bf2e5d2973a4bf5ec61161496f91.avif',
@@ -929,6 +939,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '30 см',
+            isDefault: true,
             dough: 'Традиционное тесто 30',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198bf2b03447079941f2d5ac6e986a9.avif',
@@ -1022,6 +1033,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '30 см',
+            isDefault: true,
             dough: 'Традиционное тесто 30',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198bf39dda97082912be8d1f3f2b233.avif',
@@ -1116,6 +1128,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '30 см',
+            isDefault: true,
             dough: 'Традиционное тесто 30',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198bf530345746e98039478001d5108.avif',
@@ -1185,6 +1198,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '25 см',
+            isDefault: true,
             dough: 'Римское тесто 25',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198c34c7163724e8d457fcf25b47e0a.avif',
@@ -1214,6 +1228,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '25 см',
+            isDefault: true,
             dough: 'Римское тесто 25',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198c34dfcc67080b7f471fccffd4afe.avif',
@@ -1242,6 +1257,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '25 см',
+            isDefault: true,
             dough: 'Римское тесто 25',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198c34ea0c7723aac1648821db230dc.avif',
@@ -1265,6 +1281,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '25 см',
+            isDefault: true,
             dough: 'Римское тесто 25',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198c34f3137721b9fffdbc55f92c692.avif',
@@ -1293,6 +1310,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '25 см',
+            isDefault: true,
             dough: 'Римское тесто 25',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198c34d60ab75cda799d93c7ce7888b.avif',
@@ -1312,6 +1330,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '5 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198556badcf772484ba8ef325c9f09f.avif',
             price: 379,
@@ -1368,6 +1387,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '4 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/01981875ae8e75239a409d63775530d8.avif',
             price: 239,
@@ -1385,6 +1405,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/01980e8a432071ca863e03212730c399.avif',
             price: 239,
@@ -1402,6 +1423,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: 'Стандартная',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/01980e91c07075d9be384b7b94e75a8f.avif',
             price: 149,
@@ -1432,6 +1454,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198e2f708ea73ed9b0f96052ddbbcca.avif',
             price: 409,
@@ -1462,6 +1485,7 @@ const RECIPES: Partial<
          },
          {
             sizeName: '5 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/01980e9159aa74ca93e7daaa7db3e9fd.avif',
             price: 359,
@@ -1492,6 +1516,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198605864fc73b8a8259cbfa18e95c8.avif',
             price: 239,
@@ -1509,6 +1534,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/01981879683b7800b043f47530267f30.avif',
             price: 319,
@@ -1526,6 +1552,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/01980cbb11e677738af9e254a413763f.avif',
             price: 279,
@@ -1543,6 +1570,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/01980e9041a377569779e41755a81ad1.avif',
             price: 249,
@@ -1560,6 +1588,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '5 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198131dce8b706bb3ed5a169df1bc84.avif',
             price: 179,
@@ -1590,6 +1619,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: 'Стандартная',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198ae98f5a377b4938dd4c854f1857c.avif',
             price: 180,
@@ -1620,6 +1650,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: 'Стандартная',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019840bab7aa74cd8d4149cd161ba42d.avif',
             price: 149,
@@ -1650,6 +1681,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198bebb723d747c983fbd6a7d91e898.avif',
             price: 315,
@@ -1668,6 +1700,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019880e437cf72dc8443a2522c3b0dac.avif',
             price: 269,
@@ -1698,6 +1731,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019880f785d074bbaa91e9941f69886d.avif',
             price: 269,
@@ -1728,6 +1762,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019880e8b6937532b97793190301bc16.avif',
             price: 269,
@@ -1758,6 +1793,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019880db637073d9845a6716db10ee2f.avif',
             price: 225,
@@ -1788,6 +1824,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019880e09a9a76b2863cc38afed7cecc.avif',
             price: 269,
@@ -1818,6 +1855,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019880f355447458a0550f03664b9bf0.avif',
             price: 269,
@@ -1849,6 +1887,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019880a7cf08704eb1d12bfe60c86d15.avif',
             price: 119,
@@ -1866,6 +1905,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019880ae50287638a7791638577caddd.avif',
             price: 159,
@@ -1883,6 +1923,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019880d39c7174308c8bfddab9f464ac.avif',
             price: 169,
@@ -1900,6 +1941,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019889895ae171a39e525e1eb15f9112.avif',
             price: 199,
@@ -1917,6 +1959,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019880abad8071e49e7074a462d96a6f.avif',
             price: 270,
@@ -1947,6 +1990,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.4 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019840b6488170018dd640026aea9961.avif',
             price: 179,
@@ -1964,6 +2008,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.4 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/01982280dc9a778c941ba53768d94882.avif',
             price: 179,
@@ -1981,6 +2026,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198227e7648741ead340c4c96da45a4.avif',
             price: 119,
@@ -2012,6 +2058,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198a7fe871b78fa9d851008cf535f66.avif',
             price: 139,
@@ -2029,6 +2076,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             dough: 'Со льдом',
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/01987e4e953b786c949c4cebb4b9438b.avif',
@@ -2089,6 +2137,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.5 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/01980e8d35af7157a519bd92cabda4f7.avif',
             price: 155,
@@ -2106,6 +2155,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.5 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0197f8650cad733baf4fcfeb53fb32e4.avif',
             price: 155,
@@ -2123,6 +2173,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.5 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0197f868dc4e7112ab7f594535dee17b.avif',
             price: 159,
@@ -2140,6 +2191,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.5 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0197f868ed507997948b292b5ad77228.avif',
             price: 159,
@@ -2157,6 +2209,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0197f866677d77d580aa9f99dd242835.avif',
             price: 279,
@@ -2167,6 +2220,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.5 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0197f8622bea796bbf371c7b54bb9fb4.avif',
             price: 100,
@@ -2177,6 +2231,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.45 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0197f86db50d71cd87171622bb122c9c.avif',
             price: 179,
@@ -2194,6 +2249,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '0.3 л',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198228137be72d0a399945b32057515.avif',
             price: 159,
@@ -2212,6 +2268,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198beb73b7d771a946dc64393dffde6.avif',
             price: 199,
@@ -2229,6 +2286,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/019840ba1e6078459e4aa5777065f0bc.avif',
             price: 189,
@@ -2246,6 +2304,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '2 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/01980d419be874a5abd2ce54dcac236f.avif',
             price: 179,
@@ -2276,6 +2335,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '2 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/01980d4050e8787b9f4a8c22c2d45cb5.avif',
             price: 155,
@@ -2307,6 +2367,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/01980cbdbaef76e1b1aec6df48c66b64.avif',
             price: 49,
@@ -2324,6 +2385,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0197f86ac30a734eb384d710bb1789f3.avif',
             price: 49,
@@ -2341,6 +2403,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0197f86b0d7d744992dae61761c9ba0d.avif',
             price: 49,
@@ -2358,6 +2421,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0197f86a9e7a7766a15028ff1fa74e4b.avif',
             price: 49,
@@ -2375,6 +2439,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0197f86a743777209156e78285b05bef.avif',
             price: 45,
@@ -2392,6 +2457,7 @@ const RECIPES: Partial<
       variations: [
          {
             sizeName: '1 шт',
+            isDefault: true,
             imageUrl:
                'https://media.dodostatic.net/image/r:584x584/0198bf1ecc3b7148bd270117b8edf400.avif',
             price: 15,
@@ -2421,12 +2487,14 @@ const getProductVariations = async () => {
       {
          sizeName,
          dough,
+         isDefault,
          base,
          imageUrl,
          price,
          foodValue,
       }: {
          sizeName: SizeName
+         isDefault?: boolean
          dough?: IngredientName
          base?: BaseIngredients
          imageUrl: string
@@ -2449,6 +2517,7 @@ const getProductVariations = async () => {
          sizeId: sizesMap[sizeName],
          imageUrl,
          price,
+         isDefault,
          ...(ingredientsData.length > 0 && {
             ingredients: { createMany: { data: ingredientsData } },
          }),
