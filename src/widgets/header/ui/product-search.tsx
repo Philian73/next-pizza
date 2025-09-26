@@ -1,7 +1,7 @@
 'use client'
 
-import type { Product } from '@/entities/product'
 import type { CommandSearchItem } from '@/features/search-with-suggestions'
+import type { ApiSchemas } from '@/shared/api'
 
 import { useEffect, useState } from 'react'
 
@@ -13,7 +13,7 @@ import { useDebounce } from '@/shared/lib/hooks/use-debounce'
 export const ProductSearch = () => {
    const [open, setOpen] = useState(false)
 
-   const [products, setProducts] = useState<Product[]>()
+   const [products, setProducts] = useState<ApiSchemas['Product'][]>()
    const [search, setSearch] = useState('')
 
    const debouncedSearch = useDebounce(search, 500)

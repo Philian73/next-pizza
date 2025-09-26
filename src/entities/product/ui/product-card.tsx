@@ -1,7 +1,8 @@
 import type { ComponentProps } from 'react'
 
-import type { Product, ProductStatus } from '../model/product-types'
 import type { VariantProps } from 'class-variance-authority'
+
+import type { ApiSchemas } from '@/shared/api'
 
 import { PlusIcon } from 'lucide-react'
 
@@ -14,14 +15,16 @@ import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/shadcn/button'
 import { Typography } from '@/shared/ui/typography'
 
-import { ProductStatuses } from '../model/product-types'
+type ProductStatus = ApiSchemas['Product']['status']
 
 type ProductCardProps = {
-   product: Product
+   product: ApiSchemas['Product']
 } & Omit<ComponentProps<'article'>, 'children'>
 
 export const ProductCard = ({ className, product, ...rest }: ProductCardProps) => {
    const link = PATHS.product(product.slug)
+
+   const price = product.price ?? product.variations?.[0]?.price
 
    return (
       <article className={cn('flex flex-col gap-3', className)} {...rest}>
@@ -50,8 +53,8 @@ export const ProductCard = ({ className, product, ...rest }: ProductCardProps) =
 
          <footer className={'flex items-center justify-between'}>
             <Typography as={'span'} className={'text-[20px] font-bold'}>
-               {product.items.length > 1 && 'от '}
-               {product.items?.[0].price ?? 0} ₽
+               {product.variations.length > 1 && 'от '}
+               {price} ₽
             </Typography>
 
             <Button asChild variant={'secondary'}>
@@ -70,7 +73,8 @@ const productStatusVariants = cva(
    {
       variants: {
          status: {
-            REGULAR: `bg-background text-foreground`,
+            DEFAULT: `bg-background text-foreground`,
+            ARCHIVED: `bg-pink-400 text-background`,
             HIT: `bg-pink-400 text-background`,
             NEW: `bg-indigo-500 text-background`,
          } satisfies Record<ProductStatus, string>,
@@ -82,14 +86,14 @@ type ProductStatusProps = Omit<ComponentProps<'span'>, 'children'> &
    VariantProps<typeof productStatusVariants>
 
 const ProductStatus = ({ status, className, ...rest }: ProductStatusProps) => {
-   if (status === ProductStatuses.REGULAR) {
+   if (status === 'DEFAULT') {
       return null
    }
 
    return (
       <span className={cn(productStatusVariants({ status, className }))} {...rest}>
-         {status === ProductStatuses.HIT && 'хит'}
-         {status === ProductStatuses.NEW && 'новинка'}
+         {status === 'HIT' && 'хит'}
+         {status === 'NEW' && 'новинка'}
       </span>
    )
 }

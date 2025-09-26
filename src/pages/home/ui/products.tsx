@@ -1,4 +1,4 @@
-import type { Product } from '@/entities/product'
+import type { ApiSchemas } from '@/shared/api'
 
 import { productApi } from '@/entities/product'
 
@@ -18,18 +18,18 @@ export const Products = async () => {
 
          return acc
       },
-      {} as Record<string, Product[]>
+      {} as Record<string, ApiSchemas['Product'][]>
    )
 
    return (
       <div className={'flex flex-col gap-6'}>
-         {Object.entries(map).map(([category, [product]]) => {
+         {Object.entries(map).map(([category, products]) => {
             return (
                <ProductsGroupList
                   heading={category}
                   key={category}
-                  products={map[category]}
-                  categorySlug={product.category.slug}
+                  products={products}
+                  categorySlug={products[0]?.category.slug ?? ''}
                />
             )
          })}

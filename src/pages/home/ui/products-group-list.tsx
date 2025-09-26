@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from 'react'
 
-import type { Product } from '@/entities/product'
+import type { ApiSchemas } from '@/shared/api'
 
 import { useEffect, useRef } from 'react'
 
@@ -13,7 +13,7 @@ import { useCategoryNavStore } from '@/widgets/top-bar'
 
 type ProductsGroupListProps = {
    heading: string
-   products: Product[]
+   products: ApiSchemas['Product'][]
    categorySlug: string
 } & Omit<ComponentProps<'section'>, 'children' | 'ref'>
 
