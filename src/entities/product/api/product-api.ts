@@ -9,17 +9,4 @@ export const productApi = {
          next: { revalidate: 60, ...options?.next },
       })
    },
-
-   async getProductBySlug(slug: string, options?: ApiOptions<'getProductBySlug'>) {
-      return await baseInstance.GET('/products/{slug}', {
-         ...options,
-         next: { revalidate: 60, ...options?.next },
-         params: {
-            path: {
-               slug,
-            },
-            ...options?.params,
-         },
-      })
-   },
 }

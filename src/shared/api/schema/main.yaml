@@ -82,27 +82,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/Product'
 
-  /products/{slug}:
-    get:
-      tags: [product]
-      summary: Получение продукта по slug
-      operationId: getProductBySlug
-      parameters:
-        - name: slug
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Продукт получен
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductDetail'
-        '404':
-          $ref: '#/components/responses/404'
-
 components:
   schemas:
     User:
@@ -202,62 +181,6 @@ components:
       required: [id, name, slug, description, imageUrl, status, maxCountPerOrder, price, createdAt, updatedAt, category, traits, variations]
       properties:
         id:
-          $ref: '#/components/schemas/Cuid'
-        name:
-          type: string
-          example: 'Пепперони'
-        slug:
-          type: string
-          example: 'pepperoni'
-        description:
-          type: string
-          nullable: true
-        imageUrl:
-          type: string
-          format: uri
-          nullable: true
-        status:
-          type: string
-          enum: [DEFAULT, NEW, HIT, ARCHIVED]
-        maxCountPerOrder:
-          type: integer
-          format: int32
-          nullable: true
-        price:
-          type: number
-          format: double
-          nullable: true
-          default: null
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        category:
-          $ref: '#/components/schemas/CategoryShort'
-        traits:
-          type: object
-          properties:
-            vegan:
-              type: boolean
-              default: false
-            spicy:
-              type: boolean
-              default: false
-            forChildren:
-              type: boolean
-              default: false
-        variations:
-          type: array
-          minItems: 0
-          items:
-            $ref: '#/components/schemas/ProductVariation'
-    ProductDetail:
-      type: object
-      required: [id, name, slug, description, imageUrl, status, maxCountPerOrder, price, createdAt, updatedAt, category, traits, variations]
-      properties:
-        id:
               $ref: '#/components/schemas/Cuid'
         name:
               type: string
@@ -308,11 +231,11 @@ components:
               type: array
               minItems: 0
               items:
-                $ref: '#/components/schemas/ProductVariationDetail'
+                $ref: '#/components/schemas/ProductVariation'
 
     ProductVariation:
       type: object
-      required: [id, isDefault, price, imageUrl, size]
+      required: [id, isDefault, price, imageUrl, size, foodValue, ingredients]
       properties:
         id:
           $ref: '#/components/schemas/Cuid'
@@ -327,36 +250,30 @@ components:
           nullable: true
         size:
           $ref: '#/components/schemas/Size'
-    ProductVariationDetail:
-      allOf:
-        - $ref: '#/components/schemas/ProductVariation'
-        - type: object
-          required: [foodValue, ingredients]
+        foodValue:
+          type: object
+          required: [ calories, proteins, fats, carbohydrates, weight ]
           properties:
-            foodValue:
-              type: object
-              required: [calories, proteins, fats, carbohydrates, weight]
-              properties:
-                calories:
-                  type: number
-                  format: double
-                proteins:
-                  type: number
-                  format: double
-                fats:
-                  type: number
-                  format: double
-                carbohydrates:
-                  type: number
-                  format: double
-                weight:
-                  type: number
-                  format: double
-            ingredients:
-              type: array
-              minItems: 0
-              items:
-                $ref: '#/components/schemas/ProductVariationIngredient'
+            calories:
+              type: number
+              format: double
+            proteins:
+              type: number
+              format: double
+            fats:
+              type: number
+              format: double
+            carbohydrates:
+              type: number
+              format: double
+            weight:
+              type: number
+              format: double
+        ingredients:
+          type: array
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/ProductVariationIngredient'
 
     ProductVariationIngredient:
       type: object

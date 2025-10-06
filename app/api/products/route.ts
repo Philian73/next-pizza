@@ -30,8 +30,29 @@ export async function GET(request: NextRequest) {
                productId: true,
                sizeId: true,
             },
+
             include: {
                size: true,
+               foodValue: {
+                  omit: {
+                     variationId: true,
+                  },
+               },
+               ingredients: {
+                  omit: {
+                     variationId: true,
+                  },
+
+                  include: {
+                     details: {
+                        omit: {
+                           id: true,
+                           createdAt: true,
+                           updatedAt: true,
+                        },
+                     },
+                  },
+               },
             },
          },
       },

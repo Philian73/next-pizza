@@ -38,23 +38,6 @@ export interface paths {
       patch?: never
       trace?: never
    }
-   '/products/{slug}': {
-      parameters: {
-         query?: never
-         header?: never
-         path?: never
-         cookie?: never
-      }
-      /** Получение продукта по slug */
-      get: operations['getProductBySlug']
-      put?: never
-      post?: never
-      delete?: never
-      options?: never
-      head?: never
-      patch?: never
-      trace?: never
-   }
 }
 export type webhooks = Record<string, never>
 export interface components {
@@ -141,39 +124,6 @@ export interface components {
          }
          variations: components['schemas']['ProductVariation'][]
       }
-      ProductDetail: {
-         id: components['schemas']['Cuid']
-         /** @example Пепперони */
-         name: string
-         /** @example pepperoni */
-         slug: string
-         description: string | null
-         /** Format: uri */
-         imageUrl: string | null
-         /** @enum {string} */
-         status: 'DEFAULT' | 'NEW' | 'HIT' | 'ARCHIVED'
-         /** Format: int32 */
-         maxCountPerOrder: number | null
-         /**
-          * Format: double
-          * @default null
-          */
-         price: number | null
-         /** Format: date-time */
-         createdAt: string
-         /** Format: date-time */
-         updatedAt: string
-         category: components['schemas']['CategoryShort']
-         traits: {
-            /** @default false */
-            vegan: boolean
-            /** @default false */
-            spicy: boolean
-            /** @default false */
-            forChildren: boolean
-         }
-         variations: components['schemas']['ProductVariationDetail'][]
-      }
       ProductVariation: {
          id: components['schemas']['Cuid']
          isDefault: boolean
@@ -182,8 +132,6 @@ export interface components {
          /** Format: uri */
          imageUrl: string | null
          size: components['schemas']['Size']
-      }
-      ProductVariationDetail: components['schemas']['ProductVariation'] & {
          foodValue: {
             /** Format: double */
             calories: number
@@ -324,29 +272,6 @@ export interface operations {
                'application/json': components['schemas']['Product'][]
             }
          }
-      }
-   }
-   getProductBySlug: {
-      parameters: {
-         query?: never
-         header?: never
-         path: {
-            slug: string
-         }
-         cookie?: never
-      }
-      requestBody?: never
-      responses: {
-         /** @description Продукт получен */
-         200: {
-            headers: {
-               [name: string]: unknown
-            }
-            content: {
-               'application/json': components['schemas']['ProductDetail']
-            }
-         }
-         404: components['responses']['404']
       }
    }
 }
