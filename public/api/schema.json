@@ -384,7 +384,8 @@
           "imageUrl",
           "size",
           "foodValue",
-          "ingredients"
+          "ingredients",
+          "toppings"
         ],
         "properties": {
           "id": {
@@ -442,6 +443,36 @@
             "minItems": 0,
             "items": {
               "$ref": "#/components/schemas/ProductVariationIngredient"
+            }
+          },
+          "toppings": {
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "imageUrl",
+                "price"
+              ],
+              "properties": {
+                "id": {
+                  "$ref": "#/components/schemas/Cuid"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "imageUrl": {
+                  "type": "string",
+                  "format": "uri",
+                  "nullable": true
+                },
+                "price": {
+                  "type": "number",
+                  "format": "double"
+                }
+              }
             }
           }
         }
