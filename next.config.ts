@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
       remotePatterns: [
          {
             protocol: 'https',
-            hostname: 'media.dodostatic.net',
+            hostname: '*.dodostatic.net',
          },
       ],
    },
