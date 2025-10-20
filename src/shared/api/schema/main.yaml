@@ -235,7 +235,7 @@ components:
 
     ProductVariation:
       type: object
-      required: [id, isDefault, price, imageUrl, size, foodValue, ingredients]
+      required: [id, isDefault, price, imageUrl, size, foodValue, ingredients, toppings]
       properties:
         id:
           $ref: '#/components/schemas/Cuid'
@@ -274,6 +274,24 @@ components:
           minItems: 0
           items:
             $ref: '#/components/schemas/ProductVariationIngredient'
+        toppings:
+          type: array
+          minItems: 0
+          items:
+            type: object
+            required: [id, name, imageUrl, price]
+            properties:
+              id:
+                $ref: '#/components/schemas/Cuid'
+              name:
+                type: string
+              imageUrl:
+                type: string
+                format: uri
+                nullable: true
+              price:
+                type: number
+                format: double
 
     ProductVariationIngredient:
       type: object
