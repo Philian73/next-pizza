@@ -145,6 +145,14 @@ export interface components {
             weight: number
          }
          ingredients: components['schemas']['ProductVariationIngredient'][]
+         toppings: {
+            id: components['schemas']['Cuid']
+            name: string
+            /** Format: uri */
+            imageUrl: string | null
+            /** Format: double */
+            price: number
+         }[]
       }
       ProductVariationIngredient: {
          ingredientId: components['schemas']['Cuid']
@@ -242,10 +250,11 @@ export interface operations {
          query?: {
             /** @description Поиск по названии продукта */
             name?: string
-            /** @description Строка, задающая поле для сортировки и направление.   **Формат:** `fieldName-direction` или `fieldName.subFieldName-direction`
+            /**
+             * @description Строка, задающая поле для сортировки и направление.   **Формат:** `fieldName-direction` или `fieldName.subFieldName-direction`
              *     **Доступные направления:**   - `asc` — по возрастанию   - `desc` — по убыванию
              *     **Примеры:**   - `name-desc` — сортировка по названию (по убыванию)   - `created-asc` — сортировка по дате создания (по возрастанию)   - `author.name-asc` — сортировка по имени автора (по возрастанию)
-             *      */
+             */
             orderBy?:
                | null
                | 'status-asc'
