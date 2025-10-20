@@ -32,7 +32,20 @@ export async function GET(request: NextRequest) {
             },
 
             include: {
-               size: true,
+               size: {
+                  include: {
+                     toppingPrices: {
+                        include: {
+                           size: true,
+                           topping: {
+                              include: {
+                                 ingredient: true,
+                              },
+                           },
+                        },
+                     },
+                  },
+               },
                foodValue: {
                   omit: {
                      variationId: true,
@@ -65,5 +78,27 @@ export async function GET(request: NextRequest) {
       },
    })
 
-   return NextResponse.json(products)
+   const transformedProducts = products.map(product => ({
+      ...product,
+      variations: product.variations.map(({ size, ...variation }) => {
+         const toppings =
+            size?.toppingPrices?.map(tp => ({
+               id: tp.topping.id,
+               name: tp.topping.ingredient.name,
+               imageUrl: tp.topping.ingredient.thumbnailUrl,
+               price: Number(tp.price),
+            })) ?? []
+
+         return {
+            ...variation,
+            size: {
+               id: size.id,
+               name: size.name,
+            },
+            toppings,
+         }
+      }),
+   }))
+
+   return NextResponse.json(transformedProducts)
 }
