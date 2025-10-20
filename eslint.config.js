@@ -9,6 +9,11 @@ export default defineConfig([
    ...next,
    ...tailwind,
    {
+      rules: {
+         'no-undef': 'off',
+      },
+   },
+   {
       files: ['src/shared/lib/prisma/seed/**/*.{js,ts}', 'src/shared/api/schema/generated.ts'],
       rules: {
          'max-lines': 'off',
