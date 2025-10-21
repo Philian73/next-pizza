@@ -9,7 +9,7 @@
     "start": "next start",
     "format": "prettier --write src",
     "lint": "eslint . --ext .jsx,.js,.tsx,.ts  --no-error-on-unmatched-pattern --fix",
-    "api": "pnpm dlx openapi-typescript ./src/shared/api/schema/main.yaml -o ./src/shared/api/schema/generated.ts && prettier --write src/shared/api/schema/generated.ts && node scripts/yaml-to-json.js",
+    "api": "bunx openapi-typescript ./src/shared/api/schema/main.yaml -o ./src/shared/api/schema/generated.ts && prettier --write src/shared/api/schema/generated.ts && node scripts/yaml-to-json.js",
     "prisma:pull": "prisma db pull",
     "prisma:push": "prisma db push",
     "prisma:generate": "prisma generate",
