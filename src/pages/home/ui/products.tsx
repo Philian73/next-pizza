@@ -1,14 +1,15 @@
+'use client'
+
 import type { ApiSchemas } from '@/shared/api'
 
-import { productApi } from '@/entities/product'
+import { useProductsStore } from '@/entities/product'
 
 import { ProductsGroupList } from './products-group-list'
 
-export const Products = async () => {
-   const response = await productApi.getProducts()
-   const products = response?.data ?? []
+export const Products = () => {
+   const products = useProductsStore(state => state.products)
 
-   const map = products.reduce(
+   const map = products?.reduce(
       (acc, product) => {
          if (!acc[product.category.name]) {
             acc[product.category.name] = []
