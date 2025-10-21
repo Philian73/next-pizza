@@ -1,6 +1,7 @@
 import type { ComponentProps } from 'react'
 
 import type { VariantProps } from 'class-variance-authority'
+import type { LinkProps } from 'next/link'
 
 import type { ApiSchemas } from '@/shared/api'
 
@@ -22,13 +23,17 @@ type ProductCardProps = {
 } & Omit<ComponentProps<'article'>, 'children'>
 
 export const ProductCard = ({ className, product, ...rest }: ProductCardProps) => {
-   const link = PATHS.product(product.slug)
+   const link: LinkProps = {
+      href: PATHS.product(product.slug),
+      scroll: false,
+      prefetch: false,
+   }
 
    const price = product.price ?? product.variations?.[0]?.price
 
    return (
       <article className={cn('flex flex-col gap-3', className)} {...rest}>
-         <Link className={'flex-1'} href={link}>
+         <Link {...link} className={'flex-1'}>
             <div className={'relative flex h-65 justify-center rounded-lg bg-secondary/50 p-6'}>
                <div className={'relative size-53.75'}>
                   <Image
@@ -58,7 +63,7 @@ export const ProductCard = ({ className, product, ...rest }: ProductCardProps) =
             </Typography>
 
             <Button asChild variant={'secondary'}>
-               <Link href={link}>
+               <Link {...link}>
                   <PlusIcon size={20} />
                   Добавить
                </Link>
