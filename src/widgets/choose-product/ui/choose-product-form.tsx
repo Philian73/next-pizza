@@ -74,8 +74,6 @@ export const ChooseProductForm = ({
          toppings: toppings,
       }
 
-      console.log(data)
-
       onSubmit?.(data, e)
    }
 

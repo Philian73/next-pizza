@@ -1,11 +1,10 @@
 'use client'
 
 import type { LucideProps } from 'lucide-react'
-import type { ExoticComponent } from 'react'
+import type * as React from 'react'
 
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 import { CheckIcon } from 'lucide-react'
-import * as React from 'react'
 import { useId } from 'react'
 
 import { cn } from '@/shared/lib/utils'
@@ -13,7 +12,7 @@ import { cn } from '@/shared/lib/utils'
 type CheckboxProps = {
    label: string
    iconPosition?: 'left' | 'right'
-   icon?: ExoticComponent<LucideProps>
+   icon?: React.ExoticComponent<LucideProps>
 } & React.ComponentProps<typeof CheckboxPrimitive.Root>
 
 function Checkbox({

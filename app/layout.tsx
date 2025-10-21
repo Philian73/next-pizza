@@ -2,8 +2,9 @@ import type { ReactNode } from 'react'
 
 import { Nunito } from 'next/font/google'
 
-import '@/app/globals.css'
 import { Providers } from '@/app/providers'
+
+import '@/app/globals.css'
 
 const nunito = Nunito({
    variable: '--font-nunito',
