@@ -16,6 +16,7 @@ servers:
 tags:
   - name: category
   - name: product
+  - name: cart
 
 paths:
   /categories:
@@ -81,6 +82,54 @@ paths:
                 minItems: 0
                 items:
                   $ref: '#/components/schemas/Product'
+
+  /cart:
+    get:
+      tags: [cart]
+      summary: Получение корзины
+      operationId: getCart
+      responses:
+        '200':
+          description: Корзина
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+
+  /cart/cart-item:
+    patch:
+      tags: [cart]
+      summary: Обновление элемента корзины
+      operationId: updateCartItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [cartItemId, quantity]
+              properties:
+                cartItemId:
+                  $ref: '#/components/schemas/Cuid'
+                quantity:
+                  type: integer
+                  format: int32
+                  minimum: 1
+                toppingIds:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Cuid'
+                removedIngredientIds:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Cuid'
+      responses:
+        '200':
+          description: Обновленная корзина
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
 
 components:
   schemas:
@@ -176,6 +225,22 @@ components:
           type: string
           format: date-time
 
+    Topping:
+      type: object
+      required: [id, name, thumbnailUrl, price]
+      properties:
+        id:
+          $ref: '#/components/schemas/Cuid'
+        name:
+          type: string
+        thumbnailUrl:
+          type: string
+          format: uri
+          nullable: true
+        price:
+          type: number
+          format: double
+
     Product:
       type: object
       required: [id, name, slug, description, imageUrl, status, maxCountPerOrder, price, createdAt, updatedAt, category, traits, variations]
@@ -251,24 +316,7 @@ components:
         size:
           $ref: '#/components/schemas/Size'
         foodValue:
-          type: object
-          required: [ calories, proteins, fats, carbohydrates, weight ]
-          properties:
-            calories:
-              type: number
-              format: double
-            proteins:
-              type: number
-              format: double
-            fats:
-              type: number
-              format: double
-            carbohydrates:
-              type: number
-              format: double
-            weight:
-              type: number
-              format: double
+          $ref: '#/components/schemas/ProductVariationFoodValue'
         ingredients:
           type: array
           minItems: 0
@@ -278,20 +326,7 @@ components:
           type: array
           minItems: 0
           items:
-            type: object
-            required: [id, name, imageUrl, price]
-            properties:
-              id:
-                $ref: '#/components/schemas/Cuid'
-              name:
-                type: string
-              imageUrl:
-                type: string
-                format: uri
-                nullable: true
-              price:
-                type: number
-                format: double
+            $ref: '#/components/schemas/Topping'
 
     ProductVariationIngredient:
       type: object
@@ -318,6 +353,96 @@ components:
               type: string
               format: uri
               nullable: true
+
+    ProductVariationFoodValue:
+      type: object
+      required: [ calories, proteins, fats, carbohydrates, weight ]
+      properties:
+        calories:
+          type: number
+          format: double
+        proteins:
+          type: number
+          format: double
+        fats:
+          type: number
+          format: double
+        carbohydrates:
+          type: number
+          format: double
+        weight:
+          type: number
+          format: double
+
+    Cart:
+      type: object
+      required: [totalAmount, items]
+      properties:
+        totalAmount:
+          type: number
+          format: double
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+
+    CartItem:
+      type: object
+      required: [id, product, variationId, details, quantity, imageUrl, toppings, removedIngredients, subtotal]
+      properties:
+        id:
+          $ref: '#/components/schemas/Cuid'
+        product:
+          type: object
+          required: [id, slug, name]
+          properties:
+            id:
+              $ref: '#/components/schemas/Cuid'
+            slug:
+              type: string
+            name:
+              type: string
+        variationId:
+          $ref: '#/components/schemas/Cuid'
+        quantity:
+          type: integer
+          format: int32
+        imageUrl:
+          type: string
+          format: uri
+          nullable: true
+        toppings:
+          type: array
+          minItems: 0
+          items:
+            type: object
+            required: [id, name, price]
+            properties:
+              id:
+                $ref: '#/components/schemas/Cuid'
+              name:
+                type: string
+              price:
+                type: number
+                format: double
+        removedIngredients:
+          type: array
+          minItems: 0
+          items:
+            type: object
+            required: [id, name, displayName]
+            properties:
+              id:
+                $ref: '#/components/schemas/Cuid'
+              name:
+                type: string
+              displayName:
+                type: string
+                nullable: true
+        subtotal:
+          type: number
+          format: double
+
 
     Cuid:
       type: string

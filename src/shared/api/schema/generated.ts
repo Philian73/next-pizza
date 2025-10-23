@@ -38,6 +38,40 @@ export interface paths {
       patch?: never
       trace?: never
    }
+   '/cart': {
+      parameters: {
+         query?: never
+         header?: never
+         path?: never
+         cookie?: never
+      }
+      /** Получение корзины */
+      get: operations['getCart']
+      put?: never
+      post?: never
+      delete?: never
+      options?: never
+      head?: never
+      patch?: never
+      trace?: never
+   }
+   '/cart/cart-item': {
+      parameters: {
+         query?: never
+         header?: never
+         path?: never
+         cookie?: never
+      }
+      get?: never
+      put?: never
+      post?: never
+      delete?: never
+      options?: never
+      head?: never
+      /** Обновление элемента корзины */
+      patch: operations['updateCartItem']
+      trace?: never
+   }
 }
 export type webhooks = Record<string, never>
 export interface components {
@@ -91,6 +125,14 @@ export interface components {
          /** Format: date-time */
          updatedAt: string
       }
+      Topping: {
+         id: components['schemas']['Cuid']
+         name: string
+         /** Format: uri */
+         thumbnailUrl: string | null
+         /** Format: double */
+         price: number
+      }
       Product: {
          id: components['schemas']['Cuid']
          /** @example Пепперони */
@@ -132,27 +174,9 @@ export interface components {
          /** Format: uri */
          imageUrl: string | null
          size: components['schemas']['Size']
-         foodValue: {
-            /** Format: double */
-            calories: number
-            /** Format: double */
-            proteins: number
-            /** Format: double */
-            fats: number
-            /** Format: double */
-            carbohydrates: number
-            /** Format: double */
-            weight: number
-         }
+         foodValue: components['schemas']['ProductVariationFoodValue']
          ingredients: components['schemas']['ProductVariationIngredient'][]
-         toppings: {
-            id: components['schemas']['Cuid']
-            name: string
-            /** Format: uri */
-            imageUrl: string | null
-            /** Format: double */
-            price: number
-         }[]
+         toppings: components['schemas']['Topping'][]
       }
       ProductVariationIngredient: {
          ingredientId: components['schemas']['Cuid']
@@ -166,6 +190,49 @@ export interface components {
             /** Format: uri */
             thumbnailUrl: string | null
          }
+      }
+      ProductVariationFoodValue: {
+         /** Format: double */
+         calories: number
+         /** Format: double */
+         proteins: number
+         /** Format: double */
+         fats: number
+         /** Format: double */
+         carbohydrates: number
+         /** Format: double */
+         weight: number
+      }
+      Cart: {
+         /** Format: double */
+         totalAmount: number
+         items: components['schemas']['CartItem'][]
+      }
+      CartItem: {
+         id: components['schemas']['Cuid']
+         product: {
+            id: components['schemas']['Cuid']
+            slug: string
+            name: string
+         }
+         variationId: components['schemas']['Cuid']
+         /** Format: int32 */
+         quantity: number
+         /** Format: uri */
+         imageUrl: string | null
+         toppings: {
+            id: components['schemas']['Cuid']
+            name: string
+            /** Format: double */
+            price: number
+         }[]
+         removedIngredients: {
+            id: components['schemas']['Cuid']
+            name: string
+            displayName: string | null
+         }[]
+         /** Format: double */
+         subtotal: number
       }
       /** @description CUID identifier */
       Cuid: string
@@ -279,6 +346,56 @@ export interface operations {
             }
             content: {
                'application/json': components['schemas']['Product'][]
+            }
+         }
+      }
+   }
+   getCart: {
+      parameters: {
+         query?: never
+         header?: never
+         path?: never
+         cookie?: never
+      }
+      requestBody?: never
+      responses: {
+         /** @description Корзина */
+         200: {
+            headers: {
+               [name: string]: unknown
+            }
+            content: {
+               'application/json': components['schemas']['Cart']
+            }
+         }
+      }
+   }
+   updateCartItem: {
+      parameters: {
+         query?: never
+         header?: never
+         path?: never
+         cookie?: never
+      }
+      requestBody: {
+         content: {
+            'application/json': {
+               cartItemId: components['schemas']['Cuid']
+               /** Format: int32 */
+               quantity: number
+               toppingIds?: components['schemas']['Cuid'][]
+               removedIngredientIds?: components['schemas']['Cuid'][]
+            }
+         }
+      }
+      responses: {
+         /** @description Обновленная корзина */
+         200: {
+            headers: {
+               [name: string]: unknown
+            }
+            content: {
+               'application/json': components['schemas']['Cart']
             }
          }
       }

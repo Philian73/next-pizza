@@ -5,7 +5,7 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model User {
@@ -46,6 +46,7 @@ model Category {
 
   products Product[]
 
+  @@index([slug])
   @@map("categories")
 }
 
@@ -55,43 +56,35 @@ model Ingredient {
   name         String  @unique
   displayName  String? @map("display_name")
   thumbnailUrl String? @map("thumbnail_url")
+  isTopping    Boolean @default(false)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  toppings                    Topping[]
+  toppingPrices               ToppingPrice[]
   productVariationIngredients ProductVariationIngredient[]
-  cartItemRemovedIngredients  CartItemRemovedIngredient[]
 
   @@map("ingredients")
 }
 
-model Topping {
+model ToppingPrice {
   id String @id @default(cuid())
 
-  ingredientId String     @unique @map("ingredient_id")
+  ingredientId String     @map("ingredient_id")
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  prices           ToppingPriceBySize[]
-  cartItemToppings CartItemTopping[]
-
-  @@map("toppings")
-}
-
-model ToppingPriceBySize {
-  toppingId String  @map("topping_id")
-  topping   Topping @relation(fields: [toppingId], references: [id], onDelete: Cascade)
 
   sizeId String @map("size_id")
   size   Size   @relation(fields: [sizeId], references: [id], onDelete: Cascade)
 
   price Decimal @db.Decimal(10, 2)
 
-  @@unique([toppingId, sizeId])
-  @@map("topping_prices_by_size")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([ingredientId, sizeId])
+  @@index([ingredientId])
+  @@index([sizeId])
+  @@map("topping_prices")
 }
 
 model Size {
@@ -99,7 +92,7 @@ model Size {
 
   name String
 
-  toppingPrices     ToppingPriceBySize[]
+  toppingPrices     ToppingPrice[]
   productVariations ProductVariation[]
 
   @@map("sizes")
@@ -126,6 +119,7 @@ model Product {
 
   variations ProductVariation[]
 
+  @@index([slug])
   @@map("products")
 }
 
@@ -159,6 +153,7 @@ model ProductVariation {
   ingredients ProductVariationIngredient[]
   cartItems   CartItem[]
 
+  @@index([sizeId])
   @@map("product_variations")
 }
 
@@ -173,11 +168,13 @@ model ProductVariationIngredient {
   variation   ProductVariation @relation(fields: [variationId], references: [id], onDelete: Cascade)
 
   @@id([variationId, ingredientId])
+  @@index([ingredientId])
+  @@index([variationId])
   @@map("product_variation_ingredients")
 }
 
 model ProductVariationFoodValue {
-  variationId String           @unique
+  variationId String           @id
   variation   ProductVariation @relation(fields: [variationId], references: [id], onDelete: Cascade)
 
   calories      Float
@@ -233,8 +230,12 @@ model Cart {
 }
 
 model CartItem {
-  id       String @id @default(cuid())
-  quantity Int    @default(1)
+  id       String  @id @default(cuid())
+  quantity Int     @default(1)
+  subtotal Decimal @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   cartId String
   cart   Cart   @relation(fields: [cartId], references: [id], onDelete: Cascade)
@@ -242,32 +243,12 @@ model CartItem {
   variationId String
   variation   ProductVariation @relation(fields: [variationId], references: [id], onDelete: Cascade)
 
-  toppings           CartItemTopping[]
-  removedIngredients CartItemRemovedIngredient[]
+  toppings           Json
+  removedIngredients Json
 
+  @@index([cartId])
+  @@index([variationId])
   @@map("cart_items")
-}
-
-model CartItemTopping {
-  cartItemId String
-  cartItem   CartItem @relation(fields: [cartItemId], references: [id], onDelete: Cascade)
-
-  toppingId String
-  topping   Topping @relation(fields: [toppingId], references: [id], onDelete: Cascade)
-
-  @@id([cartItemId, toppingId])
-  @@map("cart_item_toppings")
-}
-
-model CartItemRemovedIngredient {
-  cartItemId String
-  cartItem   CartItem @relation(fields: [cartItemId], references: [id], onDelete: Cascade)
-
-  ingredientId String
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
-
-  @@id([cartItemId, ingredientId])
-  @@map("cart_item_removed_ingredients")
 }
 
 model Order {
