@@ -123,7 +123,7 @@ const RECIPES: Partial<
             sizeName: '35 см',
             dough: 'Тонкое тесто 35',
             imageUrl:
-               'https://media.dodostatic.net/image/r:584x584/0198da9f048273e690f16d79110f25ef.avif',
+               'https://media.dodostatic.net/image/r:584x584/0198da9f0ac079b6826d4278789ed657.avif',
             price: 979,
             foodValue: {
                calories: 244,
