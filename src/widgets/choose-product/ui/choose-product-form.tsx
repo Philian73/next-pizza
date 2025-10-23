@@ -4,9 +4,9 @@ import type { ComponentProps, FormEvent } from 'react'
 
 import type { ApiSchemas } from '@/shared/api'
 
+import { AddToCart } from '@/features/cart'
 import { formatPriceRub } from '@/shared/lib/format-price-rub'
 import { cn } from '@/shared/lib/utils'
-import { Button } from '@/shared/ui/shadcn/button'
 import { Typography } from '@/shared/ui/typography'
 
 import { useProductStore } from '../model/choice-product-store'
@@ -120,9 +120,9 @@ export const ChooseProductForm = ({
                <Toppings items={currentVariation.toppings} />
             </div>
 
-            <Button className={'rounded-3xl font-bold'} size={'lg'}>
-               В корзину {formatPriceRub(totalPrice)}
-            </Button>
+            <AddToCart className={'rounded-3xl font-bold'} size={'lg'}>
+               В корзину за {formatPriceRub(totalPrice)}
+            </AddToCart>
          </div>
       </form>
    )
