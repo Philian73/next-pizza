@@ -19,10 +19,10 @@ export async function GET(request: NextRequest) {
             },
          },
          category: {
-            omit: {
-               description: true,
-               createdAt: true,
-               updatedAt: true,
+            select: {
+               id: true,
+               slug: true,
+               name: true,
             },
          },
          variations: {
@@ -37,11 +37,7 @@ export async function GET(request: NextRequest) {
                      toppingPrices: {
                         include: {
                            size: true,
-                           topping: {
-                              include: {
-                                 ingredient: true,
-                              },
-                           },
+                           ingredient: true,
                         },
                      },
                   },
@@ -58,10 +54,10 @@ export async function GET(request: NextRequest) {
 
                   include: {
                      details: {
-                        omit: {
-                           id: true,
-                           createdAt: true,
-                           updatedAt: true,
+                        select: {
+                           name: true,
+                           displayName: true,
+                           thumbnailUrl: true,
                         },
                      },
                   },
@@ -80,17 +76,19 @@ export async function GET(request: NextRequest) {
 
    const transformedProducts = products.map(product => ({
       ...product,
+      ...(product.price && { price: product.price.toNumber() }),
       variations: product.variations.map(({ size, ...variation }) => {
          const toppings =
             size?.toppingPrices?.map(tp => ({
-               id: tp.topping.id,
-               name: tp.topping.ingredient.name,
-               imageUrl: tp.topping.ingredient.thumbnailUrl,
-               price: Number(tp.price),
+               id: tp.ingredient.id,
+               name: tp.ingredient.name,
+               thumbnailUrl: tp.ingredient.thumbnailUrl,
+               price: tp.price.toNumber(),
             })) ?? []
 
          return {
             ...variation,
+            price: variation.price.toNumber(),
             size: {
                id: size.id,
                name: size.name,
