@@ -5,8 +5,6 @@ import type { LinkProps } from 'next/link'
 
 import type { ApiSchemas } from '@/shared/api'
 
-import { PlusIcon } from 'lucide-react'
-
 import { cva } from 'class-variance-authority'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -63,10 +61,7 @@ export const ProductCard = ({ className, product, ...rest }: ProductCardProps) =
             </Typography>
 
             <Button asChild variant={'secondary'}>
-               <Link {...link}>
-                  <PlusIcon size={20} />
-                  Добавить
-               </Link>
+               <Link {...link}>Выбрать</Link>
             </Button>
          </footer>
       </article>
