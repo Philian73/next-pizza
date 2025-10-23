@@ -12,7 +12,7 @@ import { Typography } from '@/shared/ui/typography'
 import { getFoodValueMeta } from '../model/get-food-value-meta'
 
 type FoodValuesTooltipProps = {
-   foodValues?: ApiSchemas['ProductVariation']['foodValue']
+   foodValues?: ApiSchemas['ProductVariationFoodValue']
    triggerProps?: Omit<ComponentProps<typeof Button>, 'children'>
 } & Omit<ComponentProps<typeof Tooltip>, 'children'>
 

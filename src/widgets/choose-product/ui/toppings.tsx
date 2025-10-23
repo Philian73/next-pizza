@@ -15,7 +15,7 @@ import { Typography } from '@/shared/ui/typography'
 import { useChooseProductFilters } from '../model/use-choose-product-filters'
 
 type ToppingsProps = {
-   items: ApiSchemas['ProductVariation']['toppings']
+   items: ApiSchemas['Topping'][]
 } & Omit<ComponentProps<'section'>, 'children'>
 
 export const Toppings = ({ items, ...rest }: ToppingsProps) => {
@@ -70,7 +70,7 @@ export const Toppings = ({ items, ...rest }: ToppingsProps) => {
                      >
                         <Image
                            className={'relative block'}
-                           src={topping.imageUrl ?? ''}
+                           src={topping.thumbnailUrl ?? ''}
                            height={88}
                            width={88}
                            alt={''}

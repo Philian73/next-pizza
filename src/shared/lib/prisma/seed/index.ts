@@ -36,25 +36,13 @@ async function createSizes() {
 }
 
 async function createIngredients() {
-   const ingredients = SEED.getIngredients()
+   const ingredients = await SEED.getIngredients()
 
    console.log(`Created: Ingredients`)
 
    for (const ingredient of ingredients) {
       await prisma.ingredient.create({
          data: ingredient,
-      })
-   }
-}
-
-async function createToppings() {
-   const toppings = await SEED.getToppings()
-
-   console.log(`Created: Toppings and their prices`)
-
-   for (const topping of toppings) {
-      await prisma.topping.create({
-         data: topping,
       })
    }
 }
@@ -88,7 +76,6 @@ async function up() {
    await createCategories()
    await createSizes()
    await createIngredients()
-   await createToppings()
    await createProducts()
    await createProductVariations()
 }
@@ -100,8 +87,7 @@ async function down() {
    await prisma.$executeRaw`TRUNCATE TABLE "categories" RESTART IDENTITY CASCADE;`
    await prisma.$executeRaw`TRUNCATE TABLE "sizes" RESTART IDENTITY CASCADE;`
    await prisma.$executeRaw`TRUNCATE TABLE "ingredients" RESTART IDENTITY CASCADE;`
-   await prisma.$executeRaw`TRUNCATE TABLE "toppings" RESTART IDENTITY CASCADE;`
-   await prisma.$executeRaw`TRUNCATE TABLE "topping_prices_by_size" RESTART IDENTITY CASCADE;`
+   await prisma.$executeRaw`TRUNCATE TABLE "topping_prices" RESTART IDENTITY CASCADE;`
    await prisma.$executeRaw`TRUNCATE TABLE "products" RESTART IDENTITY CASCADE;`
    await prisma.$executeRaw`TRUNCATE TABLE "product_traits" RESTART IDENTITY CASCADE;`
    await prisma.$executeRaw`TRUNCATE TABLE "product_variations" RESTART IDENTITY CASCADE;`
